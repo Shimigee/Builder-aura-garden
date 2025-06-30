@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/dialog";
 import { PermitForm } from "./PermitForm";
 import { CreatePermitRequest, Permit } from "@shared/api";
-import { usePermits } from "@/hooks/use-permits";
 import { toast } from "@/hooks/use-toast";
 
 interface PermitDialogProps {
