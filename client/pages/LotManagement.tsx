@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthGuard } from "@/components/AuthGuard";
 import { LotDialog } from "@/components/LotDialog";
+import { PermitDialog } from "@/components/PermitDialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useLots } from "@/hooks/use-lots";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,7 @@ import {
   MapPin,
   Users,
   Square,
+  FilePlus,
 } from "lucide-react";
 import { Lot } from "@shared/api";
 
@@ -55,6 +57,10 @@ export default function LotManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [lotDialogOpen, setLotDialogOpen] = useState(false);
   const [editingLot, setEditingLot] = useState<Lot | undefined>(undefined);
+  const [permitDialogOpen, setPermitDialogOpen] = useState(false);
+  const [selectedLotForPermit, setSelectedLotForPermit] = useState<
+    string | undefined
+  >(undefined);
 
   // Filter lots based on search term
   const filteredLots = useMemo(() => {
@@ -93,6 +99,21 @@ export default function LotManagement() {
         addLot(savedLot);
       }
     }
+  };
+
+  const handleAddPermitToLot = (lotId: string) => {
+    setSelectedLotForPermit(lotId);
+    setPermitDialogOpen(true);
+  };
+
+  const handlePermitDialogClose = () => {
+    setPermitDialogOpen(false);
+    setSelectedLotForPermit(undefined);
+  };
+
+  const handlePermitSuccess = () => {
+    // In a real app, you'd refetch permits data
+    console.log("Permit created successfully for lot:", selectedLotForPermit);
   };
 
   const totalSpots = lots.reduce((sum, lot) => sum + lot.totalSpots, 0);
@@ -330,7 +351,16 @@ export default function LotManagement() {
                               <Button
                                 variant="ghost"
                                 size="sm"
+                                onClick={() => handleAddPermitToLot(lot.id)}
+                                title="Add permit to this lot"
+                              >
+                                <FilePlus className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => handleEditLot(lot)}
+                                title="Edit lot"
                               >
                                 <Edit className="h-4 w-4" />
                               </Button>
@@ -338,6 +368,7 @@ export default function LotManagement() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => handleDeleteLot(lot.id)}
+                                title="Delete lot"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -359,6 +390,15 @@ export default function LotManagement() {
           onOpenChange={setLotDialogOpen}
           lot={editingLot}
           onSuccess={handleLotSaved}
+        />
+
+        {/* Permit Dialog for Quick Add */}
+        <PermitDialog
+          open={permitDialogOpen}
+          onOpenChange={handlePermitDialogClose}
+          permit={undefined}
+          onSuccess={handlePermitSuccess}
+          preselectedLotId={selectedLotForPermit}
         />
       </div>
     </AuthGuard>

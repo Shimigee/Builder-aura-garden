@@ -46,6 +46,7 @@ interface PermitFormProps {
   onSubmit: (data: CreatePermitRequest) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
+  preselectedLotId?: string;
 }
 
 const permitTypeOptions: { value: PermitType; label: string }[] = [
@@ -66,6 +67,7 @@ export function PermitForm({
   onSubmit,
   onCancel,
   isLoading = false,
+  preselectedLotId,
 }: PermitFormProps) {
   const { user } = useAuth();
   const { lots } = useLots();
@@ -107,6 +109,7 @@ export function PermitForm({
         }
       : {
           permitNumber: generatePermitNumber(),
+          lotId: preselectedLotId || "",
           expirationDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
             .toISOString()
             .split("T")[0], // 1 year from now
@@ -474,6 +477,7 @@ export function PermitForm({
                 <Select
                   value={watchedLotId}
                   onValueChange={(value) => setValue("lotId", value)}
+                  disabled={!!preselectedLotId}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select parking lot" />
@@ -489,6 +493,11 @@ export function PermitForm({
                 {errors.lotId && (
                   <p className="text-sm text-destructive">
                     {errors.lotId.message}
+                  </p>
+                )}
+                {preselectedLotId && (
+                  <p className="text-xs text-muted-foreground">
+                    Lot has been pre-selected for this permit
                   </p>
                 )}
               </div>

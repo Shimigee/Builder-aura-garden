@@ -14,6 +14,7 @@ interface PermitDialogProps {
   onOpenChange: (open: boolean) => void;
   permit?: Permit;
   onSuccess?: () => void;
+  preselectedLotId?: string;
 }
 
 export function PermitDialog({
@@ -21,6 +22,7 @@ export function PermitDialog({
   onOpenChange,
   permit,
   onSuccess,
+  preselectedLotId,
 }: PermitDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -77,6 +79,7 @@ export function PermitDialog({
           onSubmit={handleSubmit}
           onCancel={handleCancel}
           isLoading={isLoading}
+          preselectedLotId={preselectedLotId}
         />
       </DialogContent>
     </Dialog>
