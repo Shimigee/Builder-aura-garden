@@ -61,7 +61,7 @@ const demoPermits: Permit[] = [
     parkingSpotNumber: "B08",
     isActive: true,
     issueDate: "2024-01-20",
-    expirationDate: "2024-02-15", // Expired
+    expirationDate: "2024-01-15", // Expired
     vehicle: {
       make: "Ford",
       model: "Focus",
