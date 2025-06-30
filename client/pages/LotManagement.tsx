@@ -150,7 +150,7 @@ export default function LotManagement() {
                 >
                   <Avatar className="h-9 w-9">
                     <AvatarFallback className="bg-primary text-primary-foreground">
-                      {profile?.full_name.charAt(0).toUpperCase() || "U"}
+                      {user?.name.charAt(0).toUpperCase() || "U"}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -158,13 +158,12 @@ export default function LotManagement() {
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">{profile?.full_name}</p>
+                    <p className="text-sm font-medium">{user?.name}</p>
                     <p className="text-xs text-muted-foreground">
-                      {profile?.email}
+                      {user?.email}
                     </p>
                     <Badge variant="secondary" className="w-fit text-xs">
-                      {profile?.role.charAt(0).toUpperCase() +
-                        profile?.role.slice(1)}
+                      {user?.role.charAt(0).toUpperCase() + user?.role.slice(1)}
                     </Badge>
                   </div>
                 </DropdownMenuLabel>
