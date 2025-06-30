@@ -158,8 +158,19 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* User Menu */}
-            <DropdownMenu>
+            {/* Actions */}
+            <div className="flex items-center space-x-3">
+              <Button
+                variant="outline"
+                onClick={() => navigate("/scanner")}
+                className="hidden md:flex"
+              >
+                <QrCode className="mr-2 h-4 w-4" />
+                Scan QR Code
+              </Button>
+
+              {/* User Menu */}
+              <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
