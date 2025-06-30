@@ -98,7 +98,7 @@ function getStatusIcon(permit: Permit) {
 export default function PermitDetail() {
   const { permitId } = useParams<{ permitId: string }>();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
   const { getPermitById } = usePermits();
   const { getLotName } = useLots();
   const [permitDialogOpen, setPermitDialogOpen] = useState(false);
@@ -126,7 +126,8 @@ export default function PermitDetail() {
   }
 
   // Check if user has access to this permit's lot
-  const hasAccess = user?.assignedLots.includes(permit.lotId);
+  const hasAccess =
+    profile?.role === "admin" || profile?.assigned_lots.includes(permit.lotId);
   if (!hasAccess) {
     return (
       <AuthGuard>
@@ -146,8 +147,8 @@ export default function PermitDetail() {
     );
   }
 
-  const canEdit = user?.role === "editor" || user?.role === "admin";
-  const canManageUsers = user?.role === "admin";
+  const canEdit = profile?.role === "editor" || profile?.role === "admin";
+  const canManageUsers = profile?.role === "admin";
 
   const handleEdit = () => {
     setPermitDialogOpen(true);
@@ -201,7 +202,7 @@ export default function PermitDetail() {
                 >
                   <Avatar className="h-9 w-9">
                     <AvatarFallback className="bg-primary text-primary-foreground">
-                      {user?.name.charAt(0).toUpperCase()}
+                      {profile?.full_name.charAt(0).toUpperCase() || "U"}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -209,12 +210,13 @@ export default function PermitDetail() {
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">{user?.name}</p>
+                    <p className="text-sm font-medium">{profile?.full_name}</p>
                     <p className="text-xs text-muted-foreground">
-                      {user?.email}
+                      {profile?.email}
                     </p>
                     <Badge variant="secondary" className="w-fit text-xs">
-                      {user?.role.charAt(0).toUpperCase() + user?.role.slice(1)}
+                      {profile?.role.charAt(0).toUpperCase() +
+                        profile?.role.slice(1)}
                     </Badge>
                   </div>
                 </DropdownMenuLabel>
