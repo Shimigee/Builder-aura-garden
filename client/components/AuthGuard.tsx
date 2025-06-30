@@ -34,8 +34,8 @@ export function AuthGuard({ children, requiredRole }: AuthGuardProps) {
 
   if (
     requiredRole &&
-    profile &&
-    roleHierarchy[user?.role] < roleHierarchy[requiredRole]
+    user &&
+    roleHierarchy[user.role] < roleHierarchy[requiredRole]
   ) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
