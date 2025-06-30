@@ -36,17 +36,56 @@ export function PermitDialog({
 
       if (permit) {
         // Update existing permit
+        const updatedPermit: Permit = {
+          ...permit,
+          holderName: data.holderName,
+          permitType: data.permitType,
+          lotId: data.lotId || permit.lotId,
+          unitNumber: data.unitNumber,
+          occupantStatus: data.occupantStatus,
+          vehicle: data.vehicle,
+          parkingSpotNumber: data.parkingSpotNumber,
+          expirationDate: data.expirationDate,
+          notes: data.notes,
+          updatedAt: new Date().toISOString(),
+        };
+
+        updatePermit(updatedPermit);
+
         toast({
           title: "Permit Updated",
           description: `Permit ${permit.permitNumber} has been updated successfully.`,
         });
       } else {
         // Create new permit
-        // Note: In a real app, the permit number would come from the form data
-        // and be validated/saved on the server
+        const newPermit: Permit = {
+          id: `permit-${Date.now()}`, // Simple ID generation
+          permitNumber:
+            data.permitNumber ||
+            `PMT-${Math.floor(Math.random() * 1000)
+              .toString()
+              .padStart(3, "0")}-${new Date().getFullYear()}`,
+          holderName: data.holderName,
+          permitType: data.permitType,
+          lotId: data.lotId || preselectedLotId || "",
+          unitNumber: data.unitNumber,
+          occupantStatus: data.occupantStatus,
+          vehicle: data.vehicle,
+          parkingSpotNumber: data.parkingSpotNumber,
+          expirationDate: data.expirationDate,
+          notes: data.notes,
+          qrCodeUrl: `${window.location.origin}/permit/permit-${Date.now()}`,
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          createdBy: "current-user", // In real app, get from auth context
+        };
+
+        addPermit(newPermit);
+
         toast({
           title: "Permit Created",
-          description: "New permit has been created successfully.",
+          description: `Permit ${newPermit.permitNumber} has been created successfully.`,
         });
       }
 
