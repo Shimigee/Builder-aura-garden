@@ -256,10 +256,20 @@ export default function Dashboard() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {canManageUsers && (
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>User Management</span>
-                  </DropdownMenuItem>
+                  <>
+                    <DropdownMenuItem
+                      onClick={() => navigate("/user-management")}
+                    >
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>User Management</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => navigate("/lot-management")}
+                    >
+                      <MapPin className="mr-2 h-4 w-4" />
+                      <span>Lot Management</span>
+                    </DropdownMenuItem>
+                  </>
                 )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>

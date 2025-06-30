@@ -11,6 +11,8 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import PermitDetail from "./pages/PermitDetail";
+import UserManagement from "./pages/UserManagement";
+import LotManagement from "./pages/LotManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +29,8 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/permit/:permitId" element={<PermitDetail />} />
+            <Route path="/user-management" element={<UserManagement />} />
+            <Route path="/lot-management" element={<LotManagement />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
