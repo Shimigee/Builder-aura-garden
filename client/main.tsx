@@ -36,6 +36,7 @@ const App = () => (
                 <Route path="/permit/:permitId" element={<PermitDetail />} />
                 <Route path="/user-management" element={<UserManagement />} />
                 <Route path="/lot-management" element={<LotManagement />} />
+                <Route path="/scanner" element={<Scanner />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
