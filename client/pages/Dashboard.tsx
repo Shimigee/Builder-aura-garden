@@ -171,54 +171,56 @@ export default function Dashboard() {
 
               {/* User Menu */}
               <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="relative h-9 w-9 rounded-full"
-                >
-                  <Avatar className="h-9 w-9">
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      {user?.name.charAt(0).toUpperCase() || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end">
-                <DropdownMenuLabel>
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">{user?.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {user?.email}
-                    </p>
-                    <Badge variant="secondary" className="w-fit text-xs">
-                      {user?.role.charAt(0).toUpperCase() + user?.role.slice(1)}
-                    </Badge>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {canManageUsers && (
-                  <>
-                    <DropdownMenuItem
-                      onClick={() => navigate("/user-management")}
-                    >
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>User Management</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => navigate("/lot-management")}
-                    >
-                      <MapPin className="mr-2 h-4 w-4" />
-                      <span>Lot Management</span>
-                    </DropdownMenuItem>
-                  </>
-                )}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-9 w-9 rounded-full"
+                  >
+                    <Avatar className="h-9 w-9">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {user?.name.charAt(0).toUpperCase() || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium">{user?.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {user?.email}
+                      </p>
+                      <Badge variant="secondary" className="w-fit text-xs">
+                        {user?.role.charAt(0).toUpperCase() +
+                          user?.role.slice(1)}
+                      </Badge>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {canManageUsers && (
+                    <>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/user-management")}
+                      >
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>User Management</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/lot-management")}
+                      >
+                        <MapPin className="mr-2 h-4 w-4" />
+                        <span>Lot Management</span>
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </header>
 
