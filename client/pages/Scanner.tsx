@@ -82,7 +82,7 @@ export default function Scanner() {
               </Button>
             </div>
             <h1 className="text-xl font-semibold">QR Code Scanner</h1>
-            <div className="w-20"></div> {/* Spacer for alignment */}
+            <div className="w-20"></div>
           </div>
         </header>
 
