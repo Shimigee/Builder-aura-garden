@@ -457,7 +457,12 @@ export default function Dashboard() {
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex items-center justify-end space-x-2">
-                              <Button variant="ghost" size="sm">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => navigate(`/permit/${permit.id}`)}
+                                title="View QR Code"
+                              >
                                 <QrCode className="h-4 w-4" />
                               </Button>
                               {canEdit && (
