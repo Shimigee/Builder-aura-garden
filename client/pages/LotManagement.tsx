@@ -34,7 +34,7 @@ import {
   Trash2,
   MapPin,
   Users,
-  Parking,
+  Square,
 } from "lucide-react";
 import { Lot } from "@shared/api";
 
@@ -229,7 +229,7 @@ export default function LotManagement() {
                 <CardTitle className="text-sm font-medium">
                   Total Spots
                 </CardTitle>
-                <Parking className="h-4 w-4 text-muted-foreground" />
+                <Square className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{totalSpots}</div>
