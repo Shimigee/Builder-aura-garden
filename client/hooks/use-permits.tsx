@@ -13,29 +13,42 @@ interface PermitsContextType {
 const PermitsContext = createContext<PermitsContextType | undefined>(undefined);
 
 export function PermitsProvider({ children }: { children: ReactNode }) {
-  const [permits, setPermits] = useState<Permit[]>([]);
+  const [permits, setPermits] = useState<Permit[]>(() => {
+    // Load from localStorage on initialization
+    try {
+      const savedPermits = localStorage.getItem("parkmaster_permits");
+      return savedPermits ? JSON.parse(savedPermits) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const addPermit = (permit: Permit) => {
     console.log("PermitsContext: Adding permit", permit);
     setPermits((prevPermits) => {
       const newPermits = [...prevPermits, permit];
+      localStorage.setItem("parkmaster_permits", JSON.stringify(newPermits));
       console.log("PermitsContext: New permits array", newPermits);
       return newPermits;
     });
   };
 
   const updatePermit = (updatedPermit: Permit) => {
-    setPermits((prevPermits) =>
-      prevPermits.map((permit) =>
+    setPermits((prevPermits) => {
+      const newPermits = prevPermits.map((permit) =>
         permit.id === updatedPermit.id ? updatedPermit : permit,
-      ),
-    );
+      );
+      localStorage.setItem("parkmaster_permits", JSON.stringify(newPermits));
+      return newPermits;
+    });
   };
 
   const deletePermit = (permitId: string) => {
-    setPermits((prevPermits) =>
-      prevPermits.filter((permit) => permit.id !== permitId),
-    );
+    setPermits((prevPermits) => {
+      const newPermits = prevPermits.filter((permit) => permit.id !== permitId);
+      localStorage.setItem("parkmaster_permits", JSON.stringify(newPermits));
+      return newPermits;
+    });
   };
 
   const getPermitById = (permitId: string) => {

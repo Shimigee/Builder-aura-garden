@@ -13,20 +13,40 @@ interface LotsContextType {
 const LotsContext = createContext<LotsContextType | undefined>(undefined);
 
 export function LotsProvider({ children }: { children: ReactNode }) {
-  const [lots, setLots] = useState<Lot[]>([]);
+  const [lots, setLots] = useState<Lot[]>(() => {
+    // Load from localStorage on initialization
+    try {
+      const savedLots = localStorage.getItem("parkmaster_lots");
+      return savedLots ? JSON.parse(savedLots) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const addLot = (lot: Lot) => {
-    setLots((prevLots) => [...prevLots, lot]);
+    setLots((prevLots) => {
+      const newLots = [...prevLots, lot];
+      localStorage.setItem("parkmaster_lots", JSON.stringify(newLots));
+      return newLots;
+    });
   };
 
   const updateLot = (updatedLot: Lot) => {
-    setLots((prevLots) =>
-      prevLots.map((lot) => (lot.id === updatedLot.id ? updatedLot : lot)),
-    );
+    setLots((prevLots) => {
+      const newLots = prevLots.map((lot) =>
+        lot.id === updatedLot.id ? updatedLot : lot,
+      );
+      localStorage.setItem("parkmaster_lots", JSON.stringify(newLots));
+      return newLots;
+    });
   };
 
   const deleteLot = (lotId: string) => {
-    setLots((prevLots) => prevLots.filter((lot) => lot.id !== lotId));
+    setLots((prevLots) => {
+      const newLots = prevLots.filter((lot) => lot.id !== lotId);
+      localStorage.setItem("parkmaster_lots", JSON.stringify(newLots));
+      return newLots;
+    });
   };
 
   const getLotById = (lotId: string) => {
