@@ -47,11 +47,8 @@ interface PermitFormProps {
   isLoading?: boolean;
 }
 
-const lotOptions = [
-  { value: "lot-a", label: "Lot A" },
-  { value: "lot-b", label: "Lot B" },
-  { value: "retail-1", label: "Retail Lot 1" },
-];
+// Start with empty lots - in real app, this would come from API
+const lotOptions: { value: string; label: string }[] = [];
 
 const permitTypeOptions: { value: PermitType; label: string }[] = [
   { value: "resident", label: "Resident" },

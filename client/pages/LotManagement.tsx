@@ -38,30 +38,8 @@ import {
 } from "lucide-react";
 import { Lot } from "@shared/api";
 
-// Mock lots data
-const mockLots: Lot[] = [
-  {
-    id: "lot-a",
-    name: "Lot A",
-    description: "Main residential parking area",
-    totalSpots: 150,
-    availableSpots: 23,
-  },
-  {
-    id: "lot-b",
-    name: "Lot B",
-    description: "Secondary residential and guest parking",
-    totalSpots: 100,
-    availableSpots: 45,
-  },
-  {
-    id: "retail-1",
-    name: "Retail Lot 1",
-    description: "Commercial tenant and customer parking",
-    totalSpots: 75,
-    availableSpots: 12,
-  },
-];
+// No sample data - start with empty lots
+const mockLots: Lot[] = [];
 
 function getOccupancyColor(availableSpots: number, totalSpots: number) {
   const occupancyRate = (totalSpots - availableSpots) / totalSpots;

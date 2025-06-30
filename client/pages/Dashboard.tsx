@@ -39,86 +39,11 @@ import {
 } from "lucide-react";
 import { Permit, PermitType } from "@shared/api";
 
-// Mock data for demonstration
-const mockPermits: Permit[] = [
-  {
-    id: "1",
-    permitNumber: "PMT-001-2024",
-    holderName: "John Smith",
-    permitType: "resident",
-    lotId: "lot-a",
-    unitNumber: "12A",
-    occupantStatus: "leaseholder",
-    vehicle: {
-      make: "Toyota",
-      model: "Camry",
-      licensePlate: "ABC-123",
-      imageUrl:
-        "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=500&h=300&fit=crop",
-    },
-    parkingSpotNumber: "A-15",
-    expirationDate: "2024-12-31",
-    notes: "Primary resident vehicle",
-    qrCodeUrl: "https://example.com/permit/1",
-    isActive: true,
-    createdAt: "2024-01-15T10:00:00Z",
-    updatedAt: "2024-01-15T10:00:00Z",
-    createdBy: "1",
-  },
-  {
-    id: "2",
-    permitNumber: "PMT-002-2024",
-    holderName: "Sarah Johnson",
-    permitType: "retail_tenant",
-    lotId: "retail-1",
-    unitNumber: "Suite 205",
-    occupantStatus: "business_owner",
-    vehicle: {
-      make: "Honda",
-      model: "CR-V",
-      licensePlate: "XYZ-789",
-      imageUrl:
-        "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=500&h=300&fit=crop",
-    },
-    parkingSpotNumber: "R-08",
-    expirationDate: "2024-11-30",
-    qrCodeUrl: "https://example.com/permit/2",
-    isActive: true,
-    createdAt: "2024-02-01T14:30:00Z",
-    updatedAt: "2024-02-01T14:30:00Z",
-    createdBy: "1",
-  },
-  {
-    id: "3",
-    permitNumber: "PMT-003-2024",
-    holderName: "Mike Chen",
-    permitType: "other",
-    lotId: "lot-b",
-    unitNumber: "Visitor",
-    occupantStatus: "additional_occupant",
-    vehicle: {
-      make: "BMW",
-      model: "X3",
-      licensePlate: "VIS-456",
-      imageUrl:
-        "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=500&h=300&fit=crop",
-    },
-    parkingSpotNumber: "B-22",
-    expirationDate: "2024-06-15",
-    notes: "Temporary visitor permit - 3 months",
-    qrCodeUrl: "https://example.com/permit/3",
-    isActive: false,
-    createdAt: "2024-03-10T09:15:00Z",
-    updatedAt: "2024-03-10T09:15:00Z",
-    createdBy: "2",
-  },
-];
+// No sample data - start with empty permits
+const mockPermits: Permit[] = [];
 
-const lotNames = {
-  "lot-a": "Lot A",
-  "lot-b": "Lot B",
-  "retail-1": "Retail Lot 1",
-};
+// Start with empty lot names - in real app, this would come from API
+const lotNames: Record<string, string> = {};
 
 function getPermitTypeLabel(type: PermitType) {
   const labels = {

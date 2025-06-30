@@ -48,11 +48,8 @@ const roleOptions: { value: UserRole; label: string; description: string }[] = [
   },
 ];
 
-const lotOptions = [
-  { id: "lot-a", name: "Lot A" },
-  { id: "lot-b", name: "Lot B" },
-  { id: "retail-1", name: "Retail Lot 1" },
-];
+// Start with empty lots - in real app, this would come from API
+const lotOptions: { id: string; name: string }[] = [];
 
 export function UserForm({
   user,

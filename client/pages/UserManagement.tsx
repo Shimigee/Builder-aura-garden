@@ -87,11 +87,8 @@ const mockUsers: User[] = [
   },
 ];
 
-const lotNames = {
-  "lot-a": "Lot A",
-  "lot-b": "Lot B",
-  "retail-1": "Retail Lot 1",
-};
+// Start with empty lot names - in real app, this would come from API
+const lotNames: Record<string, string> = {};
 
 function getRoleColor(role: UserRole) {
   const colors = {
