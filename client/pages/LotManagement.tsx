@@ -38,9 +38,6 @@ import {
 } from "lucide-react";
 import { Lot } from "@shared/api";
 
-// No sample data - start with empty lots
-const mockLots: Lot[] = [];
-
 function getOccupancyColor(availableSpots: number, totalSpots: number) {
   const occupancyRate = (totalSpots - availableSpots) / totalSpots;
   if (occupancyRate >= 0.9)
@@ -56,13 +53,14 @@ export default function LotManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [lotDialogOpen, setLotDialogOpen] = useState(false);
   const [editingLot, setEditingLot] = useState<Lot | undefined>(undefined);
+  const [lots, setLots] = useState<Lot[]>([]); // Start with empty lots
 
   // Filter lots based on search term
   const filteredLots = useMemo(() => {
-    if (!searchTerm) return mockLots;
+    if (!searchTerm) return lots;
 
     const search = searchTerm.toLowerCase();
-    return mockLots.filter(
+    return lots.filter(
       (lot) =>
         lot.name.toLowerCase().includes(search) ||
         (lot.description && lot.description.toLowerCase().includes(search)),
@@ -80,15 +78,26 @@ export default function LotManagement() {
   };
 
   const handleDeleteLot = (lotId: string) => {
-    // In a real app, you'd make an API call to delete the lot
-    console.log("Delete lot:", lotId);
+    setLots((prevLots) => prevLots.filter((lot) => lot.id !== lotId));
   };
 
-  const totalSpots = mockLots.reduce((sum, lot) => sum + lot.totalSpots, 0);
-  const totalAvailable = mockLots.reduce(
-    (sum, lot) => sum + lot.availableSpots,
-    0,
-  );
+  const handleLotSaved = (savedLot?: Lot) => {
+    // Refresh the lots list after successful save
+    if (savedLot) {
+      if (editingLot) {
+        // Update existing lot
+        setLots((prevLots) =>
+          prevLots.map((lot) => (lot.id === savedLot.id ? savedLot : lot)),
+        );
+      } else {
+        // Add new lot
+        setLots((prevLots) => [...prevLots, savedLot]);
+      }
+    }
+  };
+
+  const totalSpots = lots.reduce((sum, lot) => sum + lot.totalSpots, 0);
+  const totalAvailable = lots.reduce((sum, lot) => sum + lot.availableSpots, 0);
   const totalOccupied = totalSpots - totalAvailable;
 
   return (
@@ -197,7 +206,7 @@ export default function LotManagement() {
                 <MapPin className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{mockLots.length}</div>
+                <div className="text-2xl font-bold">{lots.length}</div>
                 <p className="text-xs text-muted-foreground">Parking areas</p>
               </CardContent>
             </Card>
@@ -350,10 +359,7 @@ export default function LotManagement() {
           open={lotDialogOpen}
           onOpenChange={setLotDialogOpen}
           lot={editingLot}
-          onSuccess={() => {
-            // In a real app, you'd refetch the lots data here
-            console.log("Lot saved successfully");
-          }}
+          onSuccess={handleLotSaved}
         />
       </div>
     </AuthGuard>

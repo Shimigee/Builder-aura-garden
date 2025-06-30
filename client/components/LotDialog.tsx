@@ -19,7 +19,7 @@ interface LotDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   lot?: Lot;
-  onSuccess?: () => void;
+  onSuccess?: (savedLot?: Lot) => void;
 }
 
 export function LotDialog({
@@ -36,14 +36,33 @@ export function LotDialog({
       // Simulate API call - in real app, this would call your API
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
+      let savedLot: Lot;
+
       if (lot) {
         // Update existing lot
+        savedLot = {
+          ...lot,
+          name: data.name,
+          description: data.description,
+          totalSpots: data.totalSpots,
+          // Keep existing availableSpots or adjust proportionally
+          availableSpots: Math.min(lot.availableSpots, data.totalSpots),
+        };
+
         toast({
           title: "Lot Updated",
           description: `${data.name} has been updated successfully.`,
         });
       } else {
         // Create new lot
+        savedLot = {
+          id: `lot-${Date.now()}`, // Simple ID generation
+          name: data.name,
+          description: data.description,
+          totalSpots: data.totalSpots,
+          availableSpots: data.totalSpots, // Start with all spots available
+        };
+
         toast({
           title: "Lot Created",
           description: `${data.name} has been created successfully.`,
@@ -51,7 +70,7 @@ export function LotDialog({
       }
 
       onOpenChange(false);
-      onSuccess?.();
+      onSuccess?.(savedLot);
     } catch (error) {
       toast({
         title: "Error",
