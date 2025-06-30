@@ -54,7 +54,7 @@ function getOccupancyColor(availableSpots: number, totalSpots: number) {
 }
 
 export default function LotManagement() {
-  const { profile, logout } = useAuth();
+  const { user, logout } = useAuth();
   const { lots, addLot, updateLot, deleteLot } = useLots();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
