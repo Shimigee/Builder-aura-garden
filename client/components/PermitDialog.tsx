@@ -81,6 +81,7 @@ export function PermitDialog({
           createdBy: "current-user", // In real app, get from auth context
         };
 
+        console.log("Adding new permit to context:", newPermit);
         addPermit(newPermit);
 
         toast({

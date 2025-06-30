@@ -16,7 +16,12 @@ export function PermitsProvider({ children }: { children: ReactNode }) {
   const [permits, setPermits] = useState<Permit[]>([]);
 
   const addPermit = (permit: Permit) => {
-    setPermits((prevPermits) => [...prevPermits, permit]);
+    console.log("PermitsContext: Adding permit", permit);
+    setPermits((prevPermits) => {
+      const newPermits = [...prevPermits, permit];
+      console.log("PermitsContext: New permits array", newPermits);
+      return newPermits;
+    });
   };
 
   const updatePermit = (updatedPermit: Permit) => {
