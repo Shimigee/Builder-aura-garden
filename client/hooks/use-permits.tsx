@@ -80,7 +80,7 @@ const demoPermits: Permit[] = [
     parkingSpotNumber: "R12",
     isActive: true,
     issueDate: "2024-03-01",
-    expirationDate: "2024-02-10", // Expiring soon
+    expirationDate: "2025-02-10", // Expiring soon
     vehicle: {
       make: "Chevrolet",
       model: "Transit",
