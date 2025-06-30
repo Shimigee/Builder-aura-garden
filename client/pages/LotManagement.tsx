@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { AuthGuard } from "@/components/AuthGuard";
 import { LotDialog } from "@/components/LotDialog";
 import { PermitDialog } from "@/components/PermitDialog";
-import { useAuth } from "@/hooks/use-auth";
-import { useLots } from "@/hooks/use-lots";
+import { useAuth } from "@/hooks/use-auth-supabase";
+import { useLots } from "@/hooks/use-lots-supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,7 +51,7 @@ function getOccupancyColor(availableSpots: number, totalSpots: number) {
 }
 
 export default function LotManagement() {
-  const { user, logout } = useAuth();
+  const { profile, logout } = useAuth();
   const { lots, addLot, updateLot, deleteLot } = useLots();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -147,7 +147,7 @@ export default function LotManagement() {
                 >
                   <Avatar className="h-9 w-9">
                     <AvatarFallback className="bg-primary text-primary-foreground">
-                      {user?.name.charAt(0).toUpperCase()}
+                      {profile?.full_name.charAt(0).toUpperCase() || "U"}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -155,12 +155,13 @@ export default function LotManagement() {
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">{user?.name}</p>
+                    <p className="text-sm font-medium">{profile?.full_name}</p>
                     <p className="text-xs text-muted-foreground">
-                      {user?.email}
+                      {profile?.email}
                     </p>
                     <Badge variant="secondary" className="w-fit text-xs">
-                      {user?.role.charAt(0).toUpperCase() + user?.role.slice(1)}
+                      {profile?.role.charAt(0).toUpperCase() +
+                        profile?.role.slice(1)}
                     </Badge>
                   </div>
                 </DropdownMenuLabel>

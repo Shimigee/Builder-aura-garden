@@ -27,8 +27,8 @@ import {
   PermitType,
   OccupantStatus,
 } from "@shared/api";
-import { useAuth } from "@/hooks/use-auth";
-import { useLots } from "@/hooks/use-lots";
+import { useAuth } from "@/hooks/use-auth-supabase";
+import { useLots } from "@/hooks/use-lots-supabase";
 import {
   Save,
   Car,
@@ -69,7 +69,7 @@ export function PermitForm({
   isLoading = false,
   preselectedLotId,
 }: PermitFormProps) {
-  const { user } = useAuth();
+  const { profile } = useAuth();
   const { lots } = useLots();
   const [error, setError] = useState<string | null>(null);
   const [selectedPermitType, setSelectedPermitType] =
@@ -121,7 +121,7 @@ export function PermitForm({
 
   // Filter lots based on user's access
   const availableLots = lots
-    .filter((lot) => user?.assignedLots.includes(lot.id))
+    .filter((lot) => profile?.assigned_lots.includes(lot.id))
     .map((lot) => ({ value: lot.id, label: lot.name }));
 
   // Filter occupant status based on permit type

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthGuard } from "@/components/AuthGuard";
 import { PermitDialog } from "@/components/PermitDialog";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth-supabase";
 import { usePermits } from "@/hooks/use-permits";
 import { useLots } from "@/hooks/use-lots";
 import { Button } from "@/components/ui/button";
