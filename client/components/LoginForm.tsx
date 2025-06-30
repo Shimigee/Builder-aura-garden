@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth-supabase";
 import { Loader2, Car, Shield } from "lucide-react";
 
 interface LoginFormData {
@@ -20,20 +20,31 @@ interface LoginFormData {
 }
 
 export function LoginForm() {
-  const { login, isLoading } = useAuth();
+  const { login, signUp, isLoading } = useAuth();
   const [error, setError] = useState<string | null>(null);
+  const [showSignUp, setShowSignUp] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>();
+  } = useForm<LoginFormData & { fullName?: string }>();
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: LoginFormData & { fullName?: string }) => {
     try {
       setError(null);
-      await login(data.email, data.password);
-    } catch (err) {
-      setError("Invalid email or password");
+      if (showSignUp) {
+        if (!data.fullName) {
+          setError("Full name is required");
+          return;
+        }
+        await signUp(data.email, data.password, data.fullName);
+        setError(null);
+        alert("Check your email to confirm your account!");
+      } else {
+        await login(data.email, data.password);
+      }
+    } catch (err: any) {
+      setError(err.message || "Authentication failed");
     }
   };
 
@@ -61,9 +72,13 @@ export function LoginForm() {
             <div className="mx-auto h-8 w-8 bg-primary/10 rounded-lg flex items-center justify-center">
               <Shield className="h-4 w-4 text-primary" />
             </div>
-            <CardTitle className="text-2xl">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl">
+              {showSignUp ? "Create Account" : "Welcome Back"}
+            </CardTitle>
             <CardDescription>
-              Sign in to access your parking permits
+              {showSignUp
+                ? "Create an account to manage parking permits"
+                : "Sign in to access your parking permits"}
             </CardDescription>
           </CardHeader>
 
@@ -75,6 +90,28 @@ export function LoginForm() {
             )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              {showSignUp && (
+                <div className="space-y-2">
+                  <Label htmlFor="fullName" className="text-sm font-medium">
+                    Full Name
+                  </Label>
+                  <Input
+                    id="fullName"
+                    type="text"
+                    placeholder="Enter your full name"
+                    className="h-11"
+                    {...register("fullName", {
+                      required: showSignUp ? "Full name is required" : false,
+                    })}
+                  />
+                  {errors.fullName && (
+                    <p className="text-sm text-destructive">
+                      {errors.fullName.message}
+                    </p>
+                  )}
+                </div>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium">
                   Email Address
@@ -127,30 +164,30 @@ export function LoginForm() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing In...
+                    {showSignUp ? "Creating Account..." : "Signing In..."}
                   </>
+                ) : showSignUp ? (
+                  "Create Account"
                 ) : (
                   "Sign In"
                 )}
               </Button>
             </form>
 
-            {/* Demo Credentials */}
-            <div className="mt-6 p-4 bg-muted/50 rounded-lg border">
-              <p className="text-sm font-medium text-muted-foreground mb-2">
-                Demo Credentials:
+            {/* Toggle Sign Up/Login */}
+            <div className="mt-6 text-center">
+              <p className="text-sm text-muted-foreground">
+                {showSignUp
+                  ? "Already have an account?"
+                  : "Don't have an account?"}{" "}
+                <button
+                  type="button"
+                  onClick={() => setShowSignUp(!showSignUp)}
+                  className="text-primary hover:underline"
+                >
+                  {showSignUp ? "Sign in" : "Sign up here"}
+                </button>
               </p>
-              <div className="space-y-1 text-xs text-muted-foreground">
-                <p>
-                  <strong>Admin:</strong> admin@parkingsystem.com / admin
-                </p>
-                <p>
-                  <strong>Editor:</strong> editor@parkingsystem.com / editor
-                </p>
-                <p>
-                  <strong>Viewer:</strong> viewer@parkingsystem.com / viewer
-                </p>
-              </div>
             </div>
           </CardContent>
         </Card>
