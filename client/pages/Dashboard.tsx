@@ -80,6 +80,10 @@ export default function Dashboard() {
   const { getLotName } = useLots();
   const { permits } = usePermits();
   const navigate = useNavigate();
+
+  // Debug logging
+  console.log("Dashboard permits:", permits);
+  console.log("User assigned lots:", user?.assignedLots);
   const [searchTerm, setSearchTerm] = useState("");
   const [permitDialogOpen, setPermitDialogOpen] = useState(false);
   const [editingPermit, setEditingPermit] = useState<Permit | undefined>(
