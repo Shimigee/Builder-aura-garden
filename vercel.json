@@ -1,8 +1,4 @@
 {
-  "buildCommand": "npm run build:vercel",
-  "outputDirectory": "dist/spa",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
   "rewrites": [
     {
       "source": "/(.*)",
