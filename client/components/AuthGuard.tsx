@@ -15,7 +15,7 @@ const roleHierarchy = {
 };
 
 export function AuthGuard({ children, requiredRole }: AuthGuardProps) {
-  const { user, profile, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -35,7 +35,7 @@ export function AuthGuard({ children, requiredRole }: AuthGuardProps) {
   if (
     requiredRole &&
     profile &&
-    roleHierarchy[profile.role] < roleHierarchy[requiredRole]
+    roleHierarchy[user?.role] < roleHierarchy[requiredRole]
   ) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
