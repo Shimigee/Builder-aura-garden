@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthGuard } from "@/components/AuthGuard";
 import { PermitDialog } from "@/components/PermitDialog";
 import { useAuth } from "@/hooks/use-auth";
@@ -52,6 +53,8 @@ const mockPermits: Permit[] = [
       make: "Toyota",
       model: "Camry",
       licensePlate: "ABC-123",
+      imageUrl:
+        "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=500&h=300&fit=crop",
     },
     parkingSpotNumber: "A-15",
     expirationDate: "2024-12-31",
@@ -74,6 +77,8 @@ const mockPermits: Permit[] = [
       make: "Honda",
       model: "CR-V",
       licensePlate: "XYZ-789",
+      imageUrl:
+        "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=500&h=300&fit=crop",
     },
     parkingSpotNumber: "R-08",
     expirationDate: "2024-11-30",
@@ -95,6 +100,8 @@ const mockPermits: Permit[] = [
       make: "BMW",
       model: "X3",
       licensePlate: "VIS-456",
+      imageUrl:
+        "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=500&h=300&fit=crop",
     },
     parkingSpotNumber: "B-22",
     expirationDate: "2024-06-15",
@@ -149,6 +156,7 @@ function isExpired(expirationDate: string) {
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [permitDialogOpen, setPermitDialogOpen] = useState(false);
   const [editingPermit, setEditingPermit] = useState<Permit | undefined>(
@@ -402,7 +410,13 @@ export default function Dashboard() {
                     {filteredPermits.map((permit) => (
                       <TableRow key={permit.id}>
                         <TableCell className="font-medium">
-                          {permit.permitNumber}
+                          <Button
+                            variant="link"
+                            className="p-0 h-auto font-medium text-primary hover:underline"
+                            onClick={() => navigate(`/permit/${permit.id}`)}
+                          >
+                            {permit.permitNumber}
+                          </Button>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2">

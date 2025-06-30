@@ -36,7 +36,9 @@ import {
   Calendar,
   FileText,
   Building2,
+  Camera,
 } from "lucide-react";
+import { ImageUpload } from "./ImageUpload";
 
 interface PermitFormProps {
   permit?: Permit;
@@ -74,6 +76,9 @@ export function PermitForm({
   const [error, setError] = useState<string | null>(null);
   const [selectedPermitType, setSelectedPermitType] =
     useState<PermitType | null>(permit?.permitType || null);
+  const [vehicleImage, setVehicleImage] = useState<string | undefined>(
+    permit?.vehicle.imageUrl,
+  );
 
   const {
     register,
@@ -130,7 +135,15 @@ export function PermitForm({
   const handleFormSubmit = async (data: CreatePermitRequest) => {
     try {
       setError(null);
-      await onSubmit(data);
+      // Include vehicle image in the form data
+      const formDataWithImage = {
+        ...data,
+        vehicle: {
+          ...data.vehicle,
+          imageUrl: vehicleImage,
+        },
+      };
+      await onSubmit(formDataWithImage);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save permit");
     }
