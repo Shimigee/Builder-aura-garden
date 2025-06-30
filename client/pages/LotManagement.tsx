@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthGuard } from "@/components/AuthGuard";
 import { LotDialog } from "@/components/LotDialog";
 import { useAuth } from "@/hooks/use-auth";
+import { useLots } from "@/hooks/use-lots";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,11 +50,11 @@ function getOccupancyColor(availableSpots: number, totalSpots: number) {
 
 export default function LotManagement() {
   const { user, logout } = useAuth();
+  const { lots, addLot, updateLot, deleteLot } = useLots();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [lotDialogOpen, setLotDialogOpen] = useState(false);
   const [editingLot, setEditingLot] = useState<Lot | undefined>(undefined);
-  const [lots, setLots] = useState<Lot[]>([]); // Start with empty lots
 
   // Filter lots based on search term
   const filteredLots = useMemo(() => {
@@ -78,7 +79,7 @@ export default function LotManagement() {
   };
 
   const handleDeleteLot = (lotId: string) => {
-    setLots((prevLots) => prevLots.filter((lot) => lot.id !== lotId));
+    deleteLot(lotId);
   };
 
   const handleLotSaved = (savedLot?: Lot) => {
@@ -86,12 +87,10 @@ export default function LotManagement() {
     if (savedLot) {
       if (editingLot) {
         // Update existing lot
-        setLots((prevLots) =>
-          prevLots.map((lot) => (lot.id === savedLot.id ? savedLot : lot)),
-        );
+        updateLot(savedLot);
       } else {
         // Add new lot
-        setLots((prevLots) => [...prevLots, savedLot]);
+        addLot(savedLot);
       }
     }
   };

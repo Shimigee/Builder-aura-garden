@@ -47,9 +47,6 @@ interface PermitFormProps {
   isLoading?: boolean;
 }
 
-// Start with empty lots - in real app, this would come from API
-const lotOptions: { value: string; label: string }[] = [];
-
 const permitTypeOptions: { value: PermitType; label: string }[] = [
   { value: "resident", label: "Resident" },
   { value: "retail_tenant", label: "Retail Tenant" },
@@ -70,6 +67,7 @@ export function PermitForm({
   isLoading = false,
 }: PermitFormProps) {
   const { user } = useAuth();
+  const { lots } = useLots();
   const [error, setError] = useState<string | null>(null);
   const [selectedPermitType, setSelectedPermitType] =
     useState<PermitType | null>(permit?.permitType || null);
@@ -118,9 +116,9 @@ export function PermitForm({
   const watchedPermitType = watch("permitType");
 
   // Filter lots based on user's access
-  const availableLots = lotOptions.filter((lot) =>
-    user?.assignedLots.includes(lot.value),
-  );
+  const availableLots = lots
+    .filter((lot) => user?.assignedLots.includes(lot.id))
+    .map((lot) => ({ value: lot.id, label: lot.name }));
 
   // Filter occupant status based on permit type
   const getOccupantStatusOptions = (permitType: PermitType) => {

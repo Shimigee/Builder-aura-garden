@@ -21,6 +21,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CreateUserRequest, User, UserRole } from "@shared/api";
+import { useLots } from "@/hooks/use-lots";
 import { Save, User as UserIcon, Shield, MapPin } from "lucide-react";
 
 interface UserFormProps {
@@ -48,15 +49,13 @@ const roleOptions: { value: UserRole; label: string; description: string }[] = [
   },
 ];
 
-// Start with empty lots - in real app, this would come from API
-const lotOptions: { id: string; name: string }[] = [];
-
 export function UserForm({
   user,
   onSubmit,
   onCancel,
   isLoading = false,
 }: UserFormProps) {
+  const { lots } = useLots();
   const [error, setError] = useState<string | null>(null);
   const [selectedLots, setSelectedLots] = useState<string[]>(
     user?.assignedLots || [],
@@ -282,7 +281,7 @@ export function UserForm({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
-              {lotOptions.map((lot) => (
+              {lots.map((lot) => (
                 <div key={lot.id} className="flex items-center space-x-2">
                   <Checkbox
                     id={lot.id}
@@ -303,7 +302,7 @@ export function UserForm({
                 <p className="text-sm font-medium mb-2">Selected Lots:</p>
                 <div className="flex flex-wrap gap-2">
                   {selectedLots.map((lotId) => {
-                    const lot = lotOptions.find((l) => l.id === lotId);
+                    const lot = lots.find((l) => l.id === lotId);
                     return (
                       <Badge key={lotId} variant="secondary">
                         {lot?.name}

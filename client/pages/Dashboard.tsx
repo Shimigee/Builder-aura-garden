@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthGuard } from "@/components/AuthGuard";
 import { PermitDialog } from "@/components/PermitDialog";
 import { useAuth } from "@/hooks/use-auth";
+import { useLots } from "@/hooks/use-lots";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,9 +43,6 @@ import { Permit, PermitType } from "@shared/api";
 // No sample data - start with empty permits
 const mockPermits: Permit[] = [];
 
-// Start with empty lot names - in real app, this would come from API
-const lotNames: Record<string, string> = {};
-
 function getPermitTypeLabel(type: PermitType) {
   const labels = {
     resident: "Resident",
@@ -81,6 +79,7 @@ function isExpired(expirationDate: string) {
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
+  const { getLotName } = useLots();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [permitDialogOpen, setPermitDialogOpen] = useState(false);
@@ -105,9 +104,7 @@ export default function Dashboard() {
         permit.permitNumber.toLowerCase().includes(search) ||
         permit.holderName.toLowerCase().includes(search) ||
         permit.vehicle.licensePlate.toLowerCase().includes(search) ||
-        lotNames[permit.lotId as keyof typeof lotNames]
-          .toLowerCase()
-          .includes(search),
+        getLotName(permit.lotId).toLowerCase().includes(search),
     );
   }, [accessiblePermits, searchTerm]);
 
@@ -376,9 +373,7 @@ export default function Dashboard() {
                         <TableCell>
                           <div className="flex items-center space-x-2">
                             <MapPin className="h-4 w-4 text-muted-foreground" />
-                            <span>
-                              {lotNames[permit.lotId as keyof typeof lotNames]}
-                            </span>
+                            <span>{getLotName(permit.lotId)}</span>
                           </div>
                         </TableCell>
                         <TableCell>
