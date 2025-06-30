@@ -197,6 +197,10 @@ export default function Dashboard() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/scanner")}>
+                    <QrCode className="mr-2 h-4 w-4" />
+                    <span>Scan QR Code</span>
+                  </DropdownMenuItem>
                   {canManageUsers && (
                     <>
                       <DropdownMenuItem
