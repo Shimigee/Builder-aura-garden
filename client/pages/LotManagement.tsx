@@ -42,6 +42,9 @@ import {
 import { Lot } from "@shared/api";
 
 function getOccupancyColor(availableSpots: number, totalSpots: number) {
+  if (totalSpots === 0)
+    return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+
   const occupancyRate = (totalSpots - availableSpots) / totalSpots;
   if (occupancyRate >= 0.9)
     return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
@@ -255,7 +258,10 @@ export default function LotManagement() {
               <CardContent>
                 <div className="text-2xl font-bold">{totalOccupied}</div>
                 <p className="text-xs text-muted-foreground">
-                  {Math.round((totalOccupied / totalSpots) * 100)}% occupancy
+                  {totalSpots > 0
+                    ? Math.round((totalOccupied / totalSpots) * 100)
+                    : 0}
+                  % occupancy
                 </p>
               </CardContent>
             </Card>
@@ -304,7 +310,10 @@ export default function LotManagement() {
                   <TableBody>
                     {filteredLots.map((lot) => {
                       const occupancyRate =
-                        (lot.totalSpots - lot.availableSpots) / lot.totalSpots;
+                        lot.totalSpots > 0
+                          ? (lot.totalSpots - lot.availableSpots) /
+                            lot.totalSpots
+                          : 0;
                       return (
                         <TableRow key={lot.id}>
                           <TableCell>
