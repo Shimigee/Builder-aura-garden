@@ -65,6 +65,7 @@ export interface LoginRequest {
 }
 
 export interface CreatePermitRequest {
+  permitNumber?: string; // Custom permit number for new permits
   holderName: string;
   permitType: PermitType;
   lotId: string;

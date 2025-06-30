@@ -38,12 +38,11 @@ export function PermitDialog({
         });
       } else {
         // Create new permit
-        const newPermitNumber = `PMT-${Math.floor(Math.random() * 1000)
-          .toString()
-          .padStart(3, "0")}-${new Date().getFullYear()}`;
+        // Note: In a real app, the permit number would come from the form data
+        // and be validated/saved on the server
         toast({
           title: "Permit Created",
-          description: `New permit ${newPermitNumber} has been created successfully.`,
+          description: "New permit has been created successfully.",
         });
       }
 

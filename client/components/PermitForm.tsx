@@ -86,9 +86,10 @@ export function PermitForm({
     setValue,
     watch,
     formState: { errors },
-  } = useForm<CreatePermitRequest>({
+  } = useForm<CreatePermitRequest & { permitNumber?: string }>({
     defaultValues: permit
       ? {
+          permitNumber: permit.permitNumber,
           holderName: permit.holderName,
           permitType: permit.permitType,
           lotId: permit.lotId,
@@ -100,6 +101,7 @@ export function PermitForm({
           notes: permit.notes,
         }
       : {
+          permitNumber: generatePermitNumber(),
           expirationDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
             .toISOString()
             .split("T")[0], // 1 year from now
@@ -132,10 +134,29 @@ export function PermitForm({
     }
   };
 
-  const handleFormSubmit = async (data: CreatePermitRequest) => {
+  const handleFormSubmit = async (
+    data: CreatePermitRequest & { permitNumber?: string },
+  ) => {
     try {
       setError(null);
-      // Include vehicle image in the form data
+
+      // Validate permit number for new permits
+      if (!permit && data.permitNumber) {
+        // In a real app, you'd check against the server for uniqueness
+        // For demo, we'll just check against our mock data
+        const existingPermitNumbers = [
+          "PMT-001-2024",
+          "PMT-002-2024",
+          "PMT-003-2024",
+        ];
+        if (existingPermitNumbers.includes(data.permitNumber)) {
+          throw new Error(
+            "Permit number already exists. Please use a different number.",
+          );
+        }
+      }
+
+      // Include vehicle image and permit number in the form data
       const formDataWithImage = {
         ...data,
         vehicle: {
@@ -143,7 +164,11 @@ export function PermitForm({
           imageUrl: vehicleImage,
         },
       };
-      await onSubmit(formDataWithImage);
+
+      // Remove permitNumber from the data sent to onSubmit since it's not part of CreatePermitRequest
+      const { permitNumber, ...submitData } = formDataWithImage;
+
+      await onSubmit(submitData);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save permit");
     }
@@ -188,6 +213,63 @@ export function PermitForm({
       )}
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-8">
+        {/* Permit Number */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <FileText className="h-5 w-5" />
+              <span>Permit Number</span>
+            </CardTitle>
+            <CardDescription>
+              {permit
+                ? "The unique identifier for this permit (cannot be changed)"
+                : "Enter a unique permit number or use the generated one"}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="permitNumber">Permit Number *</Label>
+              <div className="flex space-x-2">
+                <Input
+                  id="permitNumber"
+                  placeholder="e.g., PMT-001-2024"
+                  disabled={!!permit} // Disable editing for existing permits
+                  className="font-mono"
+                  {...register("permitNumber", {
+                    required: "Permit number is required",
+                    pattern: {
+                      value: /^[A-Z0-9-]+$/,
+                      message:
+                        "Permit number can only contain uppercase letters, numbers, and dashes",
+                    },
+                  })}
+                />
+                {!permit && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      setValue("permitNumber", generatePermitNumber())
+                    }
+                  >
+                    Generate
+                  </Button>
+                )}
+              </div>
+              {errors.permitNumber && (
+                <p className="text-sm text-destructive">
+                  {errors.permitNumber.message}
+                </p>
+              )}
+              {!permit && (
+                <p className="text-xs text-muted-foreground">
+                  Use a unique identifier like PMT-001-2024 or your own format
+                </p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Permit Holder Information */}
         <Card>
           <CardHeader>
