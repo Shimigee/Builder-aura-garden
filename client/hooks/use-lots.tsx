@@ -12,8 +12,40 @@ interface LotsContextType {
 
 const LotsContext = createContext<LotsContextType | undefined>(undefined);
 
+// Demo lots data
+const demoLots: Lot[] = [
+  {
+    id: "lot-1",
+    name: "Building A - Main Lot",
+    location: "123 Main Street",
+    capacity: 50,
+    description: "Primary parking area for Building A residents",
+  },
+  {
+    id: "lot-2",
+    name: "Building B - North Lot",
+    location: "456 Oak Avenue",
+    capacity: 30,
+    description: "North side parking for Building B",
+  },
+  {
+    id: "lot-3",
+    name: "Retail Plaza",
+    location: "789 Commerce Way",
+    capacity: 75,
+    description: "Shopping center parking area",
+  },
+  {
+    id: "lot-4",
+    name: "Building C - South Lot",
+    location: "321 Pine Street",
+    capacity: 40,
+    description: "South parking area for Building C residents",
+  },
+];
+
 export function LotsProvider({ children }: { children: ReactNode }) {
-  const [lots, setLots] = useState<Lot[]>([]);
+  const [lots, setLots] = useState<Lot[]>(demoLots);
 
   const addLot = (lot: Lot) => {
     setLots((prevLots) => [...prevLots, lot]);
