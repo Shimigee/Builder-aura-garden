@@ -2,8 +2,8 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthGuard } from "@/components/AuthGuard";
 import { PermitDialog } from "@/components/PermitDialog";
-import { useAuth } from "@/hooks/use-auth";
-import { useLots } from "@/hooks/use-lots";
+import { useAuth } from "@/hooks/use-auth-supabase";
+import { useLots } from "@/hooks/use-lots-supabase";
 import { usePermits } from "@/hooks/use-permits";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -76,14 +76,15 @@ function isExpired(expirationDate: string) {
 }
 
 export default function Dashboard() {
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
   const { getLotName } = useLots();
   const { permits } = usePermits();
   const navigate = useNavigate();
 
   // Debug logging
   console.log("Dashboard permits:", permits);
-  console.log("User assigned lots:", user?.assignedLots);
+  console.log("User profile:", profile);
+  console.log("User assigned lots:", profile?.assigned_lots);
   const [searchTerm, setSearchTerm] = useState("");
   const [permitDialogOpen, setPermitDialogOpen] = useState(false);
   const [editingPermit, setEditingPermit] = useState<Permit | undefined>(
@@ -92,10 +93,16 @@ export default function Dashboard() {
 
   // Filter permits based on user's assigned lots
   const accessiblePermits = useMemo(() => {
+    if (!profile) return [];
+
+    // Admins can see all permits
+    if (profile.role === "admin") return permits;
+
+    // Others only see permits from their assigned lots
     return permits.filter((permit) =>
-      user?.assignedLots.includes(permit.lotId),
+      profile.assigned_lots.includes(permit.lotId),
     );
-  }, [permits, user?.assignedLots]);
+  }, [permits, profile]);
 
   // Filter permits based on search term
   const filteredPermits = useMemo(() => {
@@ -111,8 +118,8 @@ export default function Dashboard() {
     );
   }, [accessiblePermits, searchTerm]);
 
-  const canEdit = user?.role === "editor" || user?.role === "admin";
-  const canManageUsers = user?.role === "admin";
+  const canEdit = profile?.role === "editor" || profile?.role === "admin";
+  const canManageUsers = profile?.role === "admin";
 
   const handleCreatePermit = () => {
     setEditingPermit(undefined);
@@ -162,7 +169,7 @@ export default function Dashboard() {
                 >
                   <Avatar className="h-9 w-9">
                     <AvatarFallback className="bg-primary text-primary-foreground">
-                      {user?.name.charAt(0).toUpperCase()}
+                      {profile?.full_name.charAt(0).toUpperCase() || "U"}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -170,12 +177,13 @@ export default function Dashboard() {
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">{user?.name}</p>
+                    <p className="text-sm font-medium">{profile?.full_name}</p>
                     <p className="text-xs text-muted-foreground">
-                      {user?.email}
+                      {profile?.email}
                     </p>
                     <Badge variant="secondary" className="w-fit text-xs">
-                      {user?.role.charAt(0).toUpperCase() + user?.role.slice(1)}
+                      {profile?.role.charAt(0).toUpperCase() +
+                        profile?.role.slice(1)}
                     </Badge>
                   </div>
                 </DropdownMenuLabel>
@@ -352,7 +360,7 @@ export default function Dashboard() {
                           </div>
                           <div className="text-xs text-muted-foreground mt-2">
                             Debug: Total permits: {permits.length}, Your lots:{" "}
-                            {user?.assignedLots.join(", ") || "none"}
+                            {profile?.assigned_lots.join(", ") || "none"}
                           </div>
                         </TableCell>
                       </TableRow>
