@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { AuthGuard } from "@/components/AuthGuard";
 import { PermitDialog } from "@/components/PermitDialog";
 import { useAuth } from "@/hooks/use-auth";
+import { usePermits } from "@/hooks/use-permits";
+import { useLots } from "@/hooks/use-lots";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -36,12 +38,6 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { Permit, PermitType } from "@shared/api";
-
-// No sample data - start with empty permits
-const mockPermits: Permit[] = [];
-
-// Start with empty lot names - in real app, this would come from API
-const lotNames: Record<string, string> = {};
 
 function getPermitTypeLabel(type: PermitType) {
   const labels = {
@@ -103,10 +99,12 @@ export default function PermitDetail() {
   const { permitId } = useParams<{ permitId: string }>();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { getPermitById } = usePermits();
+  const { getLotName } = useLots();
   const [permitDialogOpen, setPermitDialogOpen] = useState(false);
 
   // Find permit by ID
-  const permit = mockPermits.find((p) => p.id === permitId);
+  const permit = permitId ? getPermitById(permitId) : undefined;
 
   if (!permit) {
     return (
@@ -267,9 +265,7 @@ export default function PermitDetail() {
                 <Badge className={getPermitTypeColor(permit.permitType)}>
                   {getPermitTypeLabel(permit.permitType)}
                 </Badge>
-                <Badge variant="outline">
-                  {lotNames[permit.lotId as keyof typeof lotNames]}
-                </Badge>
+                <Badge variant="outline">{getLotName(permit.lotId)}</Badge>
                 <Badge variant="outline">{permit.parkingSpotNumber}</Badge>
               </div>
               <p className="text-muted-foreground">
@@ -369,9 +365,7 @@ export default function PermitDetail() {
               <CardContent className="space-y-4">
                 <div>
                   <p className="text-sm text-muted-foreground">Lot</p>
-                  <p className="font-medium">
-                    {lotNames[permit.lotId as keyof typeof lotNames]}
-                  </p>
+                  <p className="font-medium">{getLotName(permit.lotId)}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Spot Number</p>

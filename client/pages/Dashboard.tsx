@@ -4,6 +4,7 @@ import { AuthGuard } from "@/components/AuthGuard";
 import { PermitDialog } from "@/components/PermitDialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useLots } from "@/hooks/use-lots";
+import { usePermits } from "@/hooks/use-permits";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,9 +40,6 @@ import {
   Settings,
 } from "lucide-react";
 import { Permit, PermitType } from "@shared/api";
-
-// No sample data - start with empty permits
-const mockPermits: Permit[] = [];
 
 function getPermitTypeLabel(type: PermitType) {
   const labels = {
@@ -80,6 +78,7 @@ function isExpired(expirationDate: string) {
 export default function Dashboard() {
   const { user, logout } = useAuth();
   const { getLotName } = useLots();
+  const { permits } = usePermits();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [permitDialogOpen, setPermitDialogOpen] = useState(false);
@@ -89,10 +88,10 @@ export default function Dashboard() {
 
   // Filter permits based on user's assigned lots
   const accessiblePermits = useMemo(() => {
-    return mockPermits.filter((permit) =>
+    return permits.filter((permit) =>
       user?.assignedLots.includes(permit.lotId),
     );
-  }, [user?.assignedLots]);
+  }, [permits, user?.assignedLots]);
 
   // Filter permits based on search term
   const filteredPermits = useMemo(() => {
