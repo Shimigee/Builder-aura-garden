@@ -428,6 +428,38 @@ export default function PermitDetail() {
               </CardContent>
             </Card>
 
+            {/* QR Code */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <QrCode className="h-5 w-5" />
+                  <span>QR Code</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-center">
+                  <QRCodeGenerator
+                    value={permit.id}
+                    size={180}
+                    className="border-2 border-muted"
+                  />
+                </div>
+                <div className="text-center space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    Scan this code to quickly access permit information
+                  </p>
+                  <Button
+                    variant="outline"
+                    onClick={handleDownloadQR}
+                    className="w-full"
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Download QR Code
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Notes */}
             {permit.notes && (
               <Card className="md:col-span-2">
