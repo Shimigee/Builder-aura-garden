@@ -12,6 +12,7 @@ import { PermitsProvider } from "@/hooks/use-permits";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import Confirm from "./pages/Confirm";
 import Dashboard from "./pages/Dashboard";
 import PermitDetail from "./pages/PermitDetail";
 import UserManagement from "./pages/UserManagement";
@@ -33,6 +34,7 @@ const App = () => (
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/confirm" element={<Confirm />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/permit/:permitId" element={<PermitDetail />} />
                   <Route path="/user-management" element={<UserManagement />} />
