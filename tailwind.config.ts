@@ -57,6 +57,16 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        permit: {
+          active: "hsl(var(--permit-active))",
+          expired: "hsl(var(--permit-expired))",
+          warning: "hsl(var(--permit-warning))",
+        },
+        lot: {
+          a: "hsl(var(--lot-a))",
+          b: "hsl(var(--lot-b))",
+          retail: "hsl(var(--retail))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
