@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthGuard } from "@/components/AuthGuard";
+import { LotDialog } from "@/components/LotDialog";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -366,7 +367,16 @@ export default function LotManagement() {
           </Card>
         </main>
 
-        {/* Lot Dialog would go here - will create separately */}
+        {/* Lot Dialog */}
+        <LotDialog
+          open={lotDialogOpen}
+          onOpenChange={setLotDialogOpen}
+          lot={editingLot}
+          onSuccess={() => {
+            // In a real app, you'd refetch the lots data here
+            console.log("Lot saved successfully");
+          }}
+        />
       </div>
     </AuthGuard>
   );
