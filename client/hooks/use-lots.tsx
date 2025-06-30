@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import { Lot } from "@shared/api";
 
 interface LotsContextType {
@@ -12,21 +18,39 @@ interface LotsContextType {
 
 const LotsContext = createContext<LotsContextType | undefined>(undefined);
 
-export function LotsProvider({ children }: { children: ReactNode }) {
-  const [lots, setLots] = useState<Lot[]>(() => {
-    // Load from localStorage on initialization
-    try {
-      const savedLots = localStorage.getItem("parkmaster_lots");
-      return savedLots ? JSON.parse(savedLots) : [];
-    } catch {
-      return [];
+// Helper function to safely access localStorage
+const getStoredLots = (): Lot[] => {
+  try {
+    if (typeof window === "undefined") return [];
+    const stored = localStorage.getItem("parkmaster_lots");
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveLotsToStorage = (lots: Lot[]) => {
+  try {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("parkmaster_lots", JSON.stringify(lots));
     }
-  });
+  } catch (error) {
+    console.warn("Failed to save lots to localStorage:", error);
+  }
+};
+
+export function LotsProvider({ children }: { children: ReactNode }) {
+  const [lots, setLots] = useState<Lot[]>([]);
+
+  // Load from localStorage after component mounts
+  useEffect(() => {
+    setLots(getStoredLots());
+  }, []);
 
   const addLot = (lot: Lot) => {
     setLots((prevLots) => {
       const newLots = [...prevLots, lot];
-      localStorage.setItem("parkmaster_lots", JSON.stringify(newLots));
+      saveLotsToStorage(newLots);
       return newLots;
     });
   };
@@ -36,7 +60,7 @@ export function LotsProvider({ children }: { children: ReactNode }) {
       const newLots = prevLots.map((lot) =>
         lot.id === updatedLot.id ? updatedLot : lot,
       );
-      localStorage.setItem("parkmaster_lots", JSON.stringify(newLots));
+      saveLotsToStorage(newLots);
       return newLots;
     });
   };
@@ -44,7 +68,7 @@ export function LotsProvider({ children }: { children: ReactNode }) {
   const deleteLot = (lotId: string) => {
     setLots((prevLots) => {
       const newLots = prevLots.filter((lot) => lot.id !== lotId);
-      localStorage.setItem("parkmaster_lots", JSON.stringify(newLots));
+      saveLotsToStorage(newLots);
       return newLots;
     });
   };
