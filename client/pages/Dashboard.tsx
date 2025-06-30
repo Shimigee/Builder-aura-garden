@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { AuthGuard } from "@/components/AuthGuard";
+import { PermitDialog } from "@/components/PermitDialog";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -149,6 +150,10 @@ function isExpired(expirationDate: string) {
 export default function Dashboard() {
   const { user, logout } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
+  const [permitDialogOpen, setPermitDialogOpen] = useState(false);
+  const [editingPermit, setEditingPermit] = useState<Permit | undefined>(
+    undefined,
+  );
 
   // Filter permits based on user's assigned lots
   const accessiblePermits = useMemo(() => {
@@ -175,6 +180,27 @@ export default function Dashboard() {
 
   const canEdit = user?.role === "editor" || user?.role === "admin";
   const canManageUsers = user?.role === "admin";
+
+  const handleCreatePermit = () => {
+    setEditingPermit(undefined);
+    setPermitDialogOpen(true);
+  };
+
+  const handleEditPermit = (permit: Permit) => {
+    setEditingPermit(permit);
+    setPermitDialogOpen(true);
+  };
+
+  const handlePermitDialogClose = () => {
+    setPermitDialogOpen(false);
+    setEditingPermit(undefined);
+  };
+
+  const handlePermitSuccess = () => {
+    // In a real app, you'd refetch the permits data here
+    // For now, we'll just close the dialog
+    console.log("Permit saved successfully");
+  };
 
   return (
     <AuthGuard>
@@ -250,7 +276,11 @@ export default function Dashboard() {
               </p>
             </div>
             {canEdit && (
-              <Button size="lg" className="w-full md:w-auto">
+              <Button
+                size="lg"
+                className="w-full md:w-auto"
+                onClick={handleCreatePermit}
+              >
                 <Plus className="mr-2 h-4 w-4" />
                 Add New Permit
               </Button>
@@ -447,7 +477,11 @@ export default function Dashboard() {
                               <QrCode className="h-4 w-4" />
                             </Button>
                             {canEdit && (
-                              <Button variant="ghost" size="sm">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleEditPermit(permit)}
+                              >
                                 <Edit className="h-4 w-4" />
                               </Button>
                             )}
@@ -461,6 +495,14 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </main>
+
+        {/* Permit Dialog */}
+        <PermitDialog
+          open={permitDialogOpen}
+          onOpenChange={setPermitDialogOpen}
+          permit={editingPermit}
+          onSuccess={handlePermitSuccess}
+        />
       </div>
     </AuthGuard>
   );
