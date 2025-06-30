@@ -342,100 +342,116 @@ export default function Dashboard() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredPermits.map((permit) => (
-                      <TableRow key={permit.id}>
-                        <TableCell className="font-medium">
-                          <Button
-                            variant="link"
-                            className="p-0 h-auto font-medium text-primary hover:underline"
-                            onClick={() => navigate(`/permit/${permit.id}`)}
-                          >
-                            {permit.permitNumber}
-                          </Button>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-2">
-                            <User className="h-4 w-4 text-muted-foreground" />
-                            <div>
-                              <div className="font-medium">
-                                {permit.holderName}
-                              </div>
-                              <div className="text-sm text-muted-foreground">
-                                {permit.unitNumber}
-                              </div>
-                            </div>
+                    {filteredPermits.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={8} className="text-center py-8">
+                          <div className="text-muted-foreground">
+                            {permits.length === 0
+                              ? "No permits created yet. Click 'Add New Permit' to get started."
+                              : "No permits found for your assigned lots."}
                           </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            className={getPermitTypeColor(permit.permitType)}
-                          >
-                            {getPermitTypeLabel(permit.permitType)}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-2">
-                            <MapPin className="h-4 w-4 text-muted-foreground" />
-                            <span>{getLotName(permit.lotId)}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div>
-                            <div className="font-medium">
-                              {permit.vehicle.make} {permit.vehicle.model}
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              {permit.vehicle.licensePlate}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">
-                            {permit.parkingSpotNumber}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          {!permit.isActive ? (
-                            <Badge variant="secondary">Inactive</Badge>
-                          ) : isExpired(permit.expirationDate) ? (
-                            <Badge className="bg-permit-expired text-white">
-                              Expired
-                            </Badge>
-                          ) : isExpiringSoon(permit.expirationDate) ? (
-                            <Badge className="bg-permit-warning text-white">
-                              Expiring Soon
-                            </Badge>
-                          ) : (
-                            <Badge className="bg-permit-active text-white">
-                              Active
-                            </Badge>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm">
-                            {new Date(
-                              permit.expirationDate,
-                            ).toLocaleDateString()}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end space-x-2">
-                            <Button variant="ghost" size="sm">
-                              <QrCode className="h-4 w-4" />
-                            </Button>
-                            {canEdit && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleEditPermit(permit)}
-                              >
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                            )}
+                          <div className="text-xs text-muted-foreground mt-2">
+                            Debug: Total permits: {permits.length}, Your lots:{" "}
+                            {user?.assignedLots.join(", ") || "none"}
                           </div>
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ) : (
+                      filteredPermits.map((permit) => (
+                        <TableRow key={permit.id}>
+                          <TableCell className="font-medium">
+                            <Button
+                              variant="link"
+                              className="p-0 h-auto font-medium text-primary hover:underline"
+                              onClick={() => navigate(`/permit/${permit.id}`)}
+                            >
+                              {permit.permitNumber}
+                            </Button>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center space-x-2">
+                              <User className="h-4 w-4 text-muted-foreground" />
+                              <div>
+                                <div className="font-medium">
+                                  {permit.holderName}
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                  {permit.unitNumber}
+                                </div>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              className={getPermitTypeColor(permit.permitType)}
+                            >
+                              {getPermitTypeLabel(permit.permitType)}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center space-x-2">
+                              <MapPin className="h-4 w-4 text-muted-foreground" />
+                              <span>{getLotName(permit.lotId)}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div>
+                              <div className="font-medium">
+                                {permit.vehicle.make} {permit.vehicle.model}
+                              </div>
+                              <div className="text-sm text-muted-foreground">
+                                {permit.vehicle.licensePlate}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline">
+                              {permit.parkingSpotNumber}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {!permit.isActive ? (
+                              <Badge variant="secondary">Inactive</Badge>
+                            ) : isExpired(permit.expirationDate) ? (
+                              <Badge className="bg-permit-expired text-white">
+                                Expired
+                              </Badge>
+                            ) : isExpiringSoon(permit.expirationDate) ? (
+                              <Badge className="bg-permit-warning text-white">
+                                Expiring Soon
+                              </Badge>
+                            ) : (
+                              <Badge className="bg-permit-active text-white">
+                                Active
+                              </Badge>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-sm">
+                              {new Date(
+                                permit.expirationDate,
+                              ).toLocaleDateString()}
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex items-center justify-end space-x-2">
+                              <Button variant="ghost" size="sm">
+                                <QrCode className="h-4 w-4" />
+                              </Button>
+                              {canEdit && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleEditPermit(permit)}
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </div>
