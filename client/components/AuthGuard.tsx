@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth-supabase";
 import { Loader2 } from "lucide-react";
 
 interface AuthGuardProps {
@@ -15,7 +15,7 @@ const roleHierarchy = {
 };
 
 export function AuthGuard({ children, requiredRole }: AuthGuardProps) {
-  const { user, isLoading } = useAuth();
+  const { user, profile, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -32,7 +32,11 @@ export function AuthGuard({ children, requiredRole }: AuthGuardProps) {
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRole && roleHierarchy[user.role] < roleHierarchy[requiredRole]) {
+  if (
+    requiredRole &&
+    profile &&
+    roleHierarchy[profile.role] < roleHierarchy[requiredRole]
+  ) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center space-y-4 max-w-md">
