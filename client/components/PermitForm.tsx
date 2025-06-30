@@ -357,6 +357,25 @@ export function PermitForm({
                 )}
               </div>
             </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label className="flex items-center space-x-2">
+                  <Camera className="h-4 w-4" />
+                  <span>Vehicle Photo</span>
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Upload a photo of the vehicle for identification purposes
+                </p>
+              </div>
+              <ImageUpload
+                value={vehicleImage}
+                onChange={setVehicleImage}
+                label=""
+                description=""
+                maxSizeMB={10}
+              />
+            </div>
           </CardContent>
         </Card>
 

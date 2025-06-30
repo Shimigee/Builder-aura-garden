@@ -42,6 +42,7 @@ export interface Permit {
     make: string;
     model: string;
     licensePlate: string;
+    imageUrl?: string; // URL to uploaded vehicle image
   };
   parkingSpotNumber: string;
   expirationDate: string;
@@ -73,6 +74,7 @@ export interface CreatePermitRequest {
     make: string;
     model: string;
     licensePlate: string;
+    imageUrl?: string;
   };
   parkingSpotNumber: string;
   expirationDate: string;
