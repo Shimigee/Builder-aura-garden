@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email: "admin@parkingsystem.com",
           name: "Admin User",
           role: "admin",
-          assignedLots: ["lot-a", "lot-b", "retail-1"],
+          assignedLots: ["lot-1", "lot-2", "lot-3", "lot-4"],
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
