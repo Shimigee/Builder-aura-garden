@@ -23,62 +23,28 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <Routes>
-        {/* Emergency route - completely bypasses all auth */}
-        <Route path="/emergency" element={<Emergency />} />
-        <Route path="/test-dashboard" element={<TestDashboard />} />
-        {/* Real dashboard without auth - for testing */}
-        <Route
-          path="/dashboard-no-auth"
-          element={
-            <LotsProvider>
-              <PermitsProvider>
-                <TooltipProvider>
-                  <DashboardNoAuth />
-                </TooltipProvider>
-              </PermitsProvider>
-            </LotsProvider>
-          }
-        />
-
-        {/* All other routes wrapped in auth */}
-        <Route
-          path="/*"
-          element={
-            <AuthProvider>
-              <LotsProvider>
-                <PermitsProvider>
-                  <TooltipProvider>
-                    <Toaster />
-                    <Sonner />
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route
-                        path="/permit/:permitId"
-                        element={<PermitDetail />}
-                      />
-                      <Route
-                        path="/user-management"
-                        element={<UserManagement />}
-                      />
-                      <Route
-                        path="/lot-management"
-                        element={<LotManagement />}
-                      />
-                      <Route path="/scanner" element={<Scanner />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </TooltipProvider>
-                </PermitsProvider>
-              </LotsProvider>
-            </AuthProvider>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <LotsProvider>
+        <PermitsProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/permit/:permitId" element={<PermitDetail />} />
+                <Route path="/user-management" element={<UserManagement />} />
+                <Route path="/lot-management" element={<LotManagement />} />
+                <Route path="/scanner" element={<Scanner />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </PermitsProvider>
+      </LotsProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
