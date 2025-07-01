@@ -92,8 +92,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUserProfile = async (userId: string) => {
     try {
-      console.log("Fetching user profile for:", userId);
-
       const { data, error } = await supabase
         .from("users")
         .select("*")
@@ -101,19 +99,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .single();
 
       if (error) {
-        console.error("Error fetching user profile:", error.message, error);
+        console.error("Error fetching user profile:", error.message);
 
         // If user doesn't exist, create a default profile
         if (error.code === "PGRST116") {
-          console.log("User profile doesn't exist, creating default...");
           await createDefaultUserProfile(userId);
           return;
         }
+        setIsLoading(false);
         return;
       }
 
       if (data) {
-        console.log("User profile loaded:", data);
         setUser({
           id: data.id,
           email: data.email,
@@ -124,8 +121,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           updatedAt: data.updated_at,
         });
       }
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching user profile:", error);
+      setIsLoading(false);
     }
   };
 
