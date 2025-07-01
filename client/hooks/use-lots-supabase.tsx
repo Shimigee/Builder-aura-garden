@@ -67,6 +67,18 @@ export function LotsProvider({ children }: { children: ReactNode }) {
     try {
       console.log("🏢 Adding lot:", lotData);
 
+      // Check authentication
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+      console.log("🔐 Current user:", user?.email, user?.id);
+
+      if (authError || !user) {
+        console.error("❌ Not authenticated:", authError);
+        throw new Error("User not authenticated");
+      }
+
       const { data, error } = await supabase
         .from("lots")
         .insert({
