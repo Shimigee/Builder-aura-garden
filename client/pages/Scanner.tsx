@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthGuard } from "@/components/AuthGuard";
 import { QRScanner } from "@/components/QRScanner";
-import { usePermits } from "@/hooks/use-permits-supabase";
+import { usePermits } from "@/hooks/use-permits";
 import { Button } from "@/components/ui/button";
 import {
   Card,
