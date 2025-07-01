@@ -208,6 +208,18 @@ export function LoginForm() {
                   >
                     Skip Auth (Testing Only)
                   </Button>
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    className="w-full"
+                    onClick={() => {
+                      // Force reload to reset auth state
+                      localStorage.clear();
+                      window.location.reload();
+                    }}
+                  >
+                    Reset Auth State
+                  </Button>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
                   Or manually enter: test@example.com / password123
