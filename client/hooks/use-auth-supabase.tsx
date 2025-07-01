@@ -27,6 +27,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const getInitialSession = async () => {
       try {
         console.log("Checking initial session...");
+        console.log("Supabase URL:", import.meta.env.VITE_SUPABASE_URL);
+        console.log(
+          "Supabase Key exists:",
+          !!import.meta.env.VITE_SUPABASE_ANON_KEY,
+        );
+
         const {
           data: { session },
           error,
