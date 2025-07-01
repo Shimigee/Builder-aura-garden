@@ -27,7 +27,7 @@ import {
   PermitType,
   OccupantStatus,
 } from "@shared/api";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth-real";
 import { useLots } from "@/hooks/use-lots";
 import {
   Save,
