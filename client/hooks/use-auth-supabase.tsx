@@ -25,15 +25,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Get initial session
     const getInitialSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      try {
+        console.log("Checking initial session...");
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
 
-      if (session?.user) {
-        await fetchUserProfile(session.user.id);
+        if (error) {
+          console.error("Session check error:", error);
+          setIsLoading(false);
+          return;
+        }
+
+        console.log("Initial session:", session);
+
+        if (session?.user) {
+          await fetchUserProfile(session.user.id);
+        }
+      } catch (error) {
+        console.error("Initial session error:", error);
+      } finally {
+        setIsLoading(false);
       }
-
-      setIsLoading(false);
     };
 
     getInitialSession();
