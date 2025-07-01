@@ -72,6 +72,8 @@ const demoPermits: Permit[] = [
       year: 2020,
       color: "Red",
       licensePlate: "LMN-9012",
+      imageUrl:
+        "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=300&fit=crop&auto=format",
     },
   },
   {
