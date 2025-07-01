@@ -20,7 +20,7 @@ interface LoginFormData {
 }
 
 export function LoginForm() {
-  const { login, signUp, isLoading } = useAuth();
+  const { login, signUp, isLoading, forceStopLoading } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [showSignUp, setShowSignUp] = useState(false);
   const {
