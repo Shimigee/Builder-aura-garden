@@ -91,15 +91,26 @@ export default function LotManagement() {
     deleteLot(lotId);
   };
 
-  const handleLotSaved = (savedLot?: Lot) => {
+  const handleLotSaved = async (savedLot?: any) => {
     // Refresh the lots list after successful save
     if (savedLot) {
-      if (editingLot) {
-        // Update existing lot
-        updateLot(savedLot);
-      } else {
-        // Add new lot
-        addLot(savedLot);
+      try {
+        if (editingLot) {
+          // Update existing lot
+          await updateLot(savedLot);
+        } else {
+          // Add new lot (without ID)
+          const lotData: Omit<Lot, "id"> = {
+            name: savedLot.name,
+            description: savedLot.description || "",
+            totalSpots: savedLot.totalSpots,
+            availableSpots: savedLot.availableSpots || savedLot.totalSpots,
+          };
+          await addLot(lotData);
+        }
+        console.log("✅ Lot operation completed successfully");
+      } catch (error) {
+        console.error("❌ Error in lot operation:", error);
       }
     }
   };
