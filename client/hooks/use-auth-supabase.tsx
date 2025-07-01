@@ -158,7 +158,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       if (data) {
-        console.log("Default user profile created:", data);
         setUser({
           id: data.id,
           email: data.email,
@@ -169,8 +168,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           updatedAt: data.updated_at,
         });
       }
+      setIsLoading(false);
     } catch (error) {
       console.error("Error creating default user profile:", error);
+      setIsLoading(false);
     }
   };
 
