@@ -70,7 +70,7 @@ export function QRScanner({ onScan, onError, className = "" }: QRScannerProps) {
             onScan(scannedText);
             stopScanning();
           }
-          if (error && error.name !== "NotFoundException") {
+          if (error && !error.name.includes("NotFoundException")) {
             console.error("Scanning error:", error);
           }
         },
