@@ -37,7 +37,7 @@ const App = () => (
             <LotsProvider>
               <PermitsProvider>
                 <TooltipProvider>
-                  <Dashboard />
+                  <DashboardNoAuth />
                 </TooltipProvider>
               </PermitsProvider>
             </LotsProvider>
