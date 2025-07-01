@@ -1,3 +1,11 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/dashboard", "destination": "/index.html" },
+    { "source": "/scanner", "destination": "/index.html" },
+    { "source": "/permit/(.*)", "destination": "/index.html" },
+    { "source": "/user-management", "destination": "/index.html" },
+    { "source": "/lot-management", "destination": "/index.html" }
+  ]
 }
