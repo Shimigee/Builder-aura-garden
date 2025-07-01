@@ -178,25 +178,38 @@ export function LoginForm() {
             {!showSignUp && (
               <div className="mt-4 p-4 bg-muted rounded-lg">
                 <p className="text-sm text-muted-foreground mb-2">
-                  For testing, you can:
+                  For testing:
                 </p>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full mb-2"
-                  onClick={async () => {
-                    try {
-                      setError(null);
-                      await login("test@example.com", "password123");
-                    } catch (err: any) {
-                      setError(err.message);
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  Demo Login (test@example.com)
-                </Button>
-                <p className="text-xs text-muted-foreground">
+                <div className="space-y-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={async () => {
+                      try {
+                        setError(null);
+                        await login("test@example.com", "password123");
+                      } catch (err: any) {
+                        setError(err.message);
+                      }
+                    }}
+                    disabled={isLoading}
+                  >
+                    Demo Login (test@example.com)
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="w-full"
+                    onClick={() => {
+                      // Force skip authentication for testing
+                      window.location.href = "/dashboard";
+                    }}
+                  >
+                    Skip Auth (Testing Only)
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
                   Or manually enter: test@example.com / password123
                 </p>
               </div>
