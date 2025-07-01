@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   build: {
-    outDir: "dist/spa",
+    outDir: "dist",
   },
   plugins: [react(), mode === "development" ? expressPlugin() : null].filter(
     Boolean,
