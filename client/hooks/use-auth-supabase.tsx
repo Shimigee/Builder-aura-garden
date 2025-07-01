@@ -176,7 +176,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (email: string, password: string) => {
-    console.log("Login attempt for:", email);
+    console.log("🔑 Login attempt for:", email);
     setIsLoading(true);
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -184,22 +184,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password,
       });
 
-      console.log("Login response:", { data, error });
+      console.log("🔑 Login response:", { data, error });
 
       if (error) {
-        console.error("Login error:", error.message);
+        console.error("❌ Login error:", error.message);
+        setIsLoading(false);
         throw new Error(error.message);
       }
 
       if (data.user) {
-        console.log("Login successful, fetching profile...");
+        console.log("✅ Login successful! User:", data.user.email);
+        console.log("👤 Fetching user profile...");
         await fetchUserProfile(data.user.id);
+      } else {
+        console.error("❌ No user returned from login");
+        setIsLoading(false);
       }
     } catch (error) {
-      console.error("Login catch block:", error);
-      throw error;
-    } finally {
+      console.error("💥 Login catch block:", error);
       setIsLoading(false);
+      throw error;
     }
   };
 
