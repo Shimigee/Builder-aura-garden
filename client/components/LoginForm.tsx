@@ -233,9 +233,25 @@ export function LoginForm() {
                     type="button"
                     variant="outline"
                     className="w-full"
-                    onClick={forceStopLoading}
+                    onClick={() => {
+                      console.log("Force stop loading clicked");
+                      forceStopLoading();
+                    }}
                   >
                     Force Stop Loading
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => {
+                      console.log("Current location:", window.location.href);
+                      console.log("isLoading:", isLoading);
+                      console.log("Attempting direct navigation...");
+                      window.open("/dashboard", "_blank");
+                    }}
+                  >
+                    Open Dashboard (New Tab)
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
