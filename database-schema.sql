@@ -14,7 +14,7 @@ CREATE TABLE public.users (
 
 -- Create lots table
 CREATE TABLE public.lots (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   description TEXT,
   total_spots INTEGER NOT NULL DEFAULT 0,
@@ -70,7 +70,7 @@ CREATE POLICY "Users can view their own data" ON public.users
 CREATE POLICY "Admins can view all users" ON public.users
   FOR SELECT USING (
     EXISTS (
-      SELECT 1 FROM public.users 
+      SELECT 1 FROM public.users
       WHERE id = auth.uid() AND role = 'admin'
     )
   );
@@ -79,8 +79,8 @@ CREATE POLICY "Admins can view all users" ON public.users
 CREATE POLICY "Users can view lots they have access to" ON public.lots
   FOR SELECT USING (
     EXISTS (
-      SELECT 1 FROM public.users 
-      WHERE id = auth.uid() 
+      SELECT 1 FROM public.users
+      WHERE id = auth.uid()
       AND (role = 'admin' OR lots.id::text = ANY(assigned_lots))
     )
   );
@@ -89,8 +89,8 @@ CREATE POLICY "Users can view lots they have access to" ON public.lots
 CREATE POLICY "Users can view permits for their assigned lots" ON public.permits
   FOR SELECT USING (
     EXISTS (
-      SELECT 1 FROM public.users 
-      WHERE id = auth.uid() 
+      SELECT 1 FROM public.users
+      WHERE id = auth.uid()
       AND (role = 'admin' OR lot_id::text = ANY(assigned_lots))
     )
   );
@@ -101,7 +101,7 @@ CREATE POLICY "Users can view vehicles for accessible permits" ON public.vehicle
     EXISTS (
       SELECT 1 FROM public.permits p
       JOIN public.users u ON (u.id = auth.uid())
-      WHERE p.id = permit_id 
+      WHERE p.id = permit_id
       AND (u.role = 'admin' OR p.lot_id::text = ANY(u.assigned_lots))
     )
   );
