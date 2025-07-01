@@ -23,6 +23,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Timeout fallback to prevent infinite loading
+    const timeout = setTimeout(() => {
+      console.log("Auth check timeout - forcing loading to false");
+      setIsLoading(false);
+    }, 5000); // 5 second timeout
+
     // Get initial session
     const getInitialSession = async () => {
       try {
@@ -40,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (error) {
           console.error("Session check error:", error);
+          clearTimeout(timeout);
           setIsLoading(false);
           return;
         }
@@ -52,6 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         console.error("Initial session error:", error);
       } finally {
+        clearTimeout(timeout);
         setIsLoading(false);
       }
     };
