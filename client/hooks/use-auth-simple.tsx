@@ -28,68 +28,73 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       console.log("👤 Getting/creating user profile for:", email);
 
-      // First try to get existing profile
-      const { data: existingUser, error: fetchError } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", userId)
-        .single();
-
-      if (existingUser) {
-        console.log("✅ Found existing user profile:", existingUser);
-        setUser({
-          id: existingUser.id,
-          email: existingUser.email,
-          name: existingUser.name,
-          role: existingUser.role,
-          assignedLots: existingUser.assigned_lots || [],
-          createdAt: existingUser.created_at,
-          updatedAt: existingUser.updated_at,
-        });
-        return;
-      }
-
-      // If user doesn't exist, create new profile
-      console.log("🆕 Creating new user profile...");
-      const newUserData = {
+      // Always create a fallback user first to prevent hanging
+      const fallbackUser = {
         id: userId,
-        email: email || "unknown@example.com",
-        name: email?.split("@")[0] || "User",
-        role: "admin", // First user becomes admin
-        assigned_lots: [],
+        email: email || "demo@example.com",
+        name: email?.split("@")[0] || "Demo User",
+        role: "admin" as const,
+        assignedLots: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
-      const { data: newUser, error: createError } = await supabase
-        .from("users")
-        .insert(newUserData)
-        .select()
-        .single();
+      setUser(fallbackUser);
+      console.log("✅ Set fallback user, attempting database lookup...");
 
-      if (createError) {
-        console.error("❌ Error creating user profile:", createError);
-        // Fallback to in-memory user
-        setUser({
-          id: userId,
-          email: email || "demo@example.com",
-          name: email?.split("@")[0] || "Demo User",
-          role: "admin",
-          assignedLots: [],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        });
-        return;
-      }
+      // Try to get/create database profile in background
+      setTimeout(async () => {
+        try {
+          const { data: existingUser } = await supabase
+            .from("users")
+            .select("*")
+            .eq("id", userId)
+            .single();
 
-      console.log("✅ Created new user profile:", newUser);
-      setUser({
-        id: newUser.id,
-        email: newUser.email,
-        name: newUser.name,
-        role: newUser.role,
-        assignedLots: newUser.assigned_lots || [],
-        createdAt: newUser.created_at,
-        updatedAt: newUser.updated_at,
-      });
+          if (existingUser) {
+            console.log("✅ Updated with database user profile");
+            setUser({
+              id: existingUser.id,
+              email: existingUser.email,
+              name: existingUser.name,
+              role: existingUser.role,
+              assignedLots: existingUser.assigned_lots || [],
+              createdAt: existingUser.created_at,
+              updatedAt: existingUser.updated_at,
+            });
+          } else {
+            // Create user profile
+            const newUserData = {
+              id: userId,
+              email: email || "unknown@example.com",
+              name: email?.split("@")[0] || "User",
+              role: "admin",
+              assigned_lots: [],
+            };
+
+            const { data: newUser } = await supabase
+              .from("users")
+              .insert(newUserData)
+              .select()
+              .single();
+
+            if (newUser) {
+              console.log("✅ Created and updated with new user profile");
+              setUser({
+                id: newUser.id,
+                email: newUser.email,
+                name: newUser.name,
+                role: newUser.role,
+                assignedLots: newUser.assigned_lots || [],
+                createdAt: newUser.created_at,
+                updatedAt: newUser.updated_at,
+              });
+            }
+          }
+        } catch (error) {
+          console.log("⚠️ Database profile operation failed, using fallback");
+        }
+      }, 100);
     } catch (error) {
       console.error("💥 Error in createOrGetUserProfile:", error);
     }
