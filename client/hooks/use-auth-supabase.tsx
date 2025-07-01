@@ -67,23 +67,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!isMounted) return;
+
       try {
-        console.log("Auth state change:", event, session?.user?.email);
         if (session?.user) {
           await fetchUserProfile(session.user.id);
         } else {
           setUser(null);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("Auth state change error:", error);
-      } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     });
 
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
-      clearTimeout(timeout);
     };
   }, []);
 
