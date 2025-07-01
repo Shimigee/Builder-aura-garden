@@ -24,48 +24,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Timeout fallback to prevent infinite loading
-    const timeout = setTimeout(() => {
-      console.log("Auth check timeout - forcing loading to false");
-      setIsLoading(false);
-    }, 2000); // 2 second timeout
+    let isMounted = true;
 
-    // Get initial session
-    const getInitialSession = async () => {
+    const initializeAuth = async () => {
       try {
-        console.log("Checking initial session...");
-        console.log("Supabase URL:", import.meta.env.VITE_SUPABASE_URL);
-        console.log(
-          "Supabase Key exists:",
-          !!import.meta.env.VITE_SUPABASE_ANON_KEY,
-        );
+        // Force loading to stop after 3 seconds max
+        setTimeout(() => {
+          if (isMounted) {
+            setIsLoading(false);
+          }
+        }, 3000);
 
         const {
           data: { session },
           error,
         } = await supabase.auth.getSession();
 
+        if (!isMounted) return;
+
         if (error) {
-          console.error("Session check error:", error);
-          clearTimeout(timeout);
+          console.error("Session error:", error.message);
           setIsLoading(false);
           return;
         }
 
-        console.log("Initial session:", session);
-
         if (session?.user) {
           await fetchUserProfile(session.user.id);
+        } else {
+          setIsLoading(false);
         }
       } catch (error) {
-        console.error("Initial session error:", error);
-      } finally {
-        clearTimeout(timeout);
-        setIsLoading(false);
+        console.error("Auth initialization error:", error);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
-    getInitialSession();
+    initializeAuth();
 
     // Listen for auth changes
     const {
