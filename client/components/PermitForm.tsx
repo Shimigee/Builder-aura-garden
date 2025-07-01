@@ -104,6 +104,7 @@ export function PermitForm({
           occupantStatus: permit.occupantStatus,
           vehicle: permit.vehicle,
           parkingSpotNumber: permit.parkingSpotNumber,
+          issueDate: permit.issueDate,
           expirationDate: permit.expirationDate,
           notes: permit.notes,
         }
