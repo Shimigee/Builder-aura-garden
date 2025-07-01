@@ -19,6 +19,7 @@ interface CreateLotRequest {
   name: string;
   description?: string;
   totalSpots: number;
+  availableSpots?: number;
 }
 
 interface LotFormProps {
