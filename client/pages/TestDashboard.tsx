@@ -18,7 +18,16 @@ export default function TestDashboard() {
 
             <div className="space-y-2">
               <Button
+                onClick={() => (window.location.href = "/dashboard-no-auth")}
+                className="w-full"
+                variant="default"
+              >
+                🚀 Try Real Dashboard (No Auth)
+              </Button>
+
+              <Button
                 onClick={() => (window.location.href = "/emergency")}
+                variant="outline"
                 className="w-full"
               >
                 Back to Emergency
@@ -26,7 +35,7 @@ export default function TestDashboard() {
 
               <Button
                 onClick={() => (window.location.href = "/login")}
-                variant="outline"
+                variant="secondary"
                 className="w-full"
               >
                 Back to Login
