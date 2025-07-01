@@ -27,7 +27,7 @@ import {
   PermitType,
   OccupantStatus,
 } from "@shared/api";
-import { useAuth } from "@/hooks/use-auth-supabase";
+import { useAuth } from "@/hooks/use-auth-simple";
 import { useLots } from "@/hooks/use-lots-supabase";
 import {
   Save,
