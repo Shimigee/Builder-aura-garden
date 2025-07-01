@@ -23,6 +23,9 @@ export function LoginForm() {
   const { login, signUp, isLoading, forceStopLoading } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [showSignUp, setShowSignUp] = useState(false);
+
+  // Debug logging
+  console.log("LoginForm render - isLoading:", isLoading);
   const {
     register,
     handleSubmit,
