@@ -220,6 +220,14 @@ export function LoginForm() {
                   >
                     Reset Auth State
                   </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={forceStopLoading}
+                  >
+                    Force Stop Loading
+                  </Button>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
                   Or manually enter: test@example.com / password123
