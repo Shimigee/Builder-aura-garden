@@ -27,12 +27,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const initializeAuth = async () => {
       try {
-        // Force loading to stop after 3 seconds max
+        // Force loading to stop after 2 seconds max
         setTimeout(() => {
           if (isMounted) {
+            console.log("Auth timeout reached - stopping loading");
             setIsLoading(false);
           }
-        }, 3000);
+        }, 2000);
 
         const {
           data: { session },
