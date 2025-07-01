@@ -28,7 +28,7 @@ CREATE TABLE public.lots (
 CREATE TABLE public.permits (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   permit_number TEXT NOT NULL UNIQUE,
-  lot_id UUID REFERENCES public.lots(id) ON DELETE CASCADE,
+  lot_id TEXT REFERENCES public.lots(id) ON DELETE CASCADE,
   holder_name TEXT NOT NULL,
   unit_number TEXT NOT NULL,
   permit_type TEXT NOT NULL CHECK (permit_type IN ('resident', 'retail_tenant', 'other')),
