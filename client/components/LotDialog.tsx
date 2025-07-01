@@ -54,11 +54,10 @@ export function LotDialog({
           description: `${data.name} has been updated successfully.`,
         });
       } else {
-        // Create new lot
-        savedLot = {
-          id: `lot-${Date.now()}`, // Simple ID generation
+        // Create new lot - don't include ID, let database generate it
+        const newLotData = {
           name: data.name,
-          description: data.description,
+          description: data.description || "",
           totalSpots: data.totalSpots,
           availableSpots: data.totalSpots, // Start with all spots available
         };
@@ -67,6 +66,10 @@ export function LotDialog({
           title: "Lot Created",
           description: `${data.name} has been created successfully.`,
         });
+
+        onOpenChange(false);
+        onSuccess?.(newLotData as any); // Pass data without ID
+        return;
       }
 
       onOpenChange(false);
