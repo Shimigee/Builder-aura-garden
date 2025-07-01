@@ -17,30 +17,30 @@ const demoLots: Lot[] = [
   {
     id: "lot-1",
     name: "Building A - Main Lot",
-    location: "123 Main Street",
-    capacity: 50,
     description: "Primary parking area for Building A residents",
+    totalSpots: 50,
+    availableSpots: 38,
   },
   {
     id: "lot-2",
     name: "Building B - North Lot",
-    location: "456 Oak Avenue",
-    capacity: 30,
     description: "North side parking for Building B",
+    totalSpots: 30,
+    availableSpots: 27,
   },
   {
     id: "lot-3",
     name: "Retail Plaza",
-    location: "789 Commerce Way",
-    capacity: 75,
     description: "Shopping center parking area",
+    totalSpots: 75,
+    availableSpots: 74,
   },
   {
     id: "lot-4",
     name: "Building C - South Lot",
-    location: "321 Pine Street",
-    capacity: 40,
     description: "South parking area for Building C residents",
+    totalSpots: 40,
+    availableSpots: 39,
   },
 ];
 
