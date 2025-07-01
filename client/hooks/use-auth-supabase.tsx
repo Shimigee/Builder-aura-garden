@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const timeout = setTimeout(() => {
       console.log("Auth check timeout - forcing loading to false");
       setIsLoading(false);
-    }, 5000); // 5 second timeout
+    }, 2000); // 2 second timeout
 
     // Get initial session
     const getInitialSession = async () => {
