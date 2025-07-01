@@ -174,6 +174,34 @@ export function LoginForm() {
               </Button>
             </form>
 
+            {/* Demo Login for Testing */}
+            {!showSignUp && (
+              <div className="mt-4 p-4 bg-muted rounded-lg">
+                <p className="text-sm text-muted-foreground mb-2">
+                  For testing, you can:
+                </p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full mb-2"
+                  onClick={async () => {
+                    try {
+                      setError(null);
+                      await login("test@example.com", "password123");
+                    } catch (err: any) {
+                      setError(err.message);
+                    }
+                  }}
+                  disabled={isLoading}
+                >
+                  Demo Login (test@example.com)
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  Or manually enter: test@example.com / password123
+                </p>
+              </div>
+            )}
+
             {/* Toggle Sign Up/Login */}
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
