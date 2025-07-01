@@ -55,15 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!mounted) return;
 
       if (event === "SIGNED_IN" && session?.user) {
-        setUser({
-          id: session.user.id,
-          email: session.user.email || "demo@example.com",
-          name: session.user.email?.split("@")[0] || "Demo User",
-          role: "admin",
-          assignedLots: ["lot-1", "lot-2", "lot-3", "lot-4"],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        });
+        await createOrGetUserProfile(session.user.id, session.user.email);
       } else if (event === "SIGNED_OUT") {
         setUser(null);
       }
