@@ -91,7 +91,7 @@ CREATE POLICY "Users can view permits for their assigned lots" ON public.permits
     EXISTS (
       SELECT 1 FROM public.users
       WHERE id = auth.uid()
-      AND (role = 'admin' OR lot_id::text = ANY(assigned_lots))
+      AND (role = 'admin' OR lot_id = ANY(assigned_lots))
     )
   );
 
