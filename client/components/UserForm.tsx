@@ -21,7 +21,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CreateUserRequest, User, UserRole } from "@shared/api";
-import { useLots } from "@/hooks/use-lots";
+import { useLots } from "@/hooks/use-lots-supabase";
 import { Save, User as UserIcon, Shield, MapPin } from "lucide-react";
 
 interface UserFormProps {
