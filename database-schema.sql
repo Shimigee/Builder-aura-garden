@@ -102,7 +102,7 @@ CREATE POLICY "Users can view vehicles for accessible permits" ON public.vehicle
       SELECT 1 FROM public.permits p
       JOIN public.users u ON (u.id = auth.uid())
       WHERE p.id = permit_id
-      AND (u.role = 'admin' OR p.lot_id::text = ANY(u.assigned_lots))
+      AND (u.role = 'admin' OR p.lot_id = ANY(u.assigned_lots))
     )
   );
 
