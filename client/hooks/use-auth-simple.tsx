@@ -21,6 +21,80 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const createOrGetUserProfile = async (
+    userId: string,
+    email: string | undefined,
+  ) => {
+    try {
+      console.log("👤 Getting/creating user profile for:", email);
+
+      // First try to get existing profile
+      const { data: existingUser, error: fetchError } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", userId)
+        .single();
+
+      if (existingUser) {
+        console.log("✅ Found existing user profile:", existingUser);
+        setUser({
+          id: existingUser.id,
+          email: existingUser.email,
+          name: existingUser.name,
+          role: existingUser.role,
+          assignedLots: existingUser.assigned_lots || [],
+          createdAt: existingUser.created_at,
+          updatedAt: existingUser.updated_at,
+        });
+        return;
+      }
+
+      // If user doesn't exist, create new profile
+      console.log("🆕 Creating new user profile...");
+      const newUserData = {
+        id: userId,
+        email: email || "unknown@example.com",
+        name: email?.split("@")[0] || "User",
+        role: "admin", // First user becomes admin
+        assigned_lots: [],
+      };
+
+      const { data: newUser, error: createError } = await supabase
+        .from("users")
+        .insert(newUserData)
+        .select()
+        .single();
+
+      if (createError) {
+        console.error("❌ Error creating user profile:", createError);
+        // Fallback to in-memory user
+        setUser({
+          id: userId,
+          email: email || "demo@example.com",
+          name: email?.split("@")[0] || "Demo User",
+          role: "admin",
+          assignedLots: [],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        });
+        return;
+      }
+
+      console.log("✅ Created new user profile:", newUser);
+      setUser({
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name,
+        role: newUser.role,
+        assignedLots: newUser.assigned_lots || [],
+        createdAt: newUser.created_at,
+        updatedAt: newUser.updated_at,
+      });
+    } catch (error) {
+      console.error("💥 Error in createOrGetUserProfile:", error);
+    }
+  };
+
   useEffect(() => {
     let mounted = true;
 
