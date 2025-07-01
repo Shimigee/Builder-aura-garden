@@ -232,15 +232,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  const forceStopLoading = () => {
-    console.log("Force stopping loading state");
-    setIsLoading(false);
-  };
-
   return (
-    <AuthContext.Provider
-      value={{ user, login, signUp, logout, isLoading, forceStopLoading }}
-    >
+    <AuthContext.Provider value={{ user, login, signUp, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
