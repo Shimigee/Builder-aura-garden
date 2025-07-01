@@ -86,7 +86,7 @@ export default function Emergency() {
               <button
                 onClick={() => {
                   alert("Raw HTML button works!");
-                  window.location.replace("/dashboard");
+                  window.location.replace("/test-dashboard");
                 }}
                 style={{
                   width: "100%",
