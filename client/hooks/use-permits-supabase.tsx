@@ -46,7 +46,11 @@ export function PermitsProvider({ children }: { children: ReactNode }) {
         .order("created_at", { ascending: false });
 
       if (permitsError) {
-        console.error("Error fetching permits:", permitsError);
+        console.error(
+          "Error fetching permits:",
+          permitsError.message,
+          permitsError,
+        );
         return;
       }
 
