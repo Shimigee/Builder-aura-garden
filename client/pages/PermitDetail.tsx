@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { AuthGuard } from "@/components/AuthGuard";
 import { PermitDialog } from "@/components/PermitDialog";
 import { QRCodeGenerator } from "@/components/QRCodeGenerator";
-import { useAuth } from "@/hooks/use-auth-simple";
+import { useAuth } from "@/hooks/use-auth-ultra-simple";
 import { useLots } from "@/hooks/use-lots-supabase";
 import { usePermits } from "@/hooks/use-permits-supabase";
 import { Button } from "@/components/ui/button";
