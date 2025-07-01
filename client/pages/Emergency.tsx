@@ -20,18 +20,31 @@ export default function Emergency() {
 
             <div className="space-y-2">
               <Button
-                onClick={() =>
+                onClick={() => {
+                  console.log("React State button clicked!");
+                  alert("React State button clicked!");
                   setMessage(
                     "Navigation test - if you see this, React is working!",
-                  )
-                }
+                  );
+                }}
                 className="w-full"
               >
                 Test React State
               </Button>
 
               <Button
-                onClick={() => (window.location.href = "/dashboard")}
+                onClick={() => {
+                  console.log("Dashboard nav button clicked!");
+                  alert(
+                    "Dashboard nav button clicked - attempting navigation...",
+                  );
+                  try {
+                    window.location.href = "/dashboard";
+                  } catch (e) {
+                    console.error("Navigation error:", e);
+                    alert("Navigation failed: " + e);
+                  }
+                }}
                 variant="outline"
                 className="w-full"
               >
@@ -39,7 +52,16 @@ export default function Emergency() {
               </Button>
 
               <Button
-                onClick={() => window.open("/dashboard", "_blank")}
+                onClick={() => {
+                  console.log("New tab button clicked!");
+                  alert("New tab button clicked - attempting to open...");
+                  try {
+                    window.open("/dashboard", "_blank");
+                  } catch (e) {
+                    console.error("New tab error:", e);
+                    alert("New tab failed: " + e);
+                  }
+                }}
                 variant="secondary"
                 className="w-full"
               >
@@ -48,15 +70,35 @@ export default function Emergency() {
 
               <Button
                 onClick={() => {
+                  console.log("Debug button clicked!");
                   console.log("Current URL:", window.location.href);
-                  console.log("Testing console...");
-                  alert("Alert test - if you see this, JS is working");
+                  console.log("User agent:", navigator.userAgent);
+                  console.log("Window object:", window);
+                  alert("Debug button clicked! Check console for details.");
                 }}
                 variant="destructive"
                 className="w-full"
               >
                 Debug Info
               </Button>
+
+              {/* Raw HTML button test */}
+              <button
+                onClick={() => {
+                  alert("Raw HTML button works!");
+                  window.location.replace("/dashboard");
+                }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  backgroundColor: "purple",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                }}
+              >
+                Raw HTML Navigation Test
+              </button>
             </div>
 
             <div className="mt-4 p-4 bg-muted rounded">
