@@ -137,7 +137,15 @@ export function PermitsProvider({ children }: { children: ReactNode }) {
         .select()
         .single();
 
+      console.log("📝 Permit insert response:", { permitResult, permitError });
+
       if (permitError) {
+        console.error(
+          "❌ Permit database error:",
+          permitError.message,
+          permitError.code,
+          permitError,
+        );
         throw new Error(permitError.message);
       }
 
