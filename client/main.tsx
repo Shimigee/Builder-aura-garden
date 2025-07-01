@@ -29,6 +29,19 @@ const App = () => (
         {/* Emergency route - completely bypasses all auth */}
         <Route path="/emergency" element={<Emergency />} />
         <Route path="/test-dashboard" element={<TestDashboard />} />
+        {/* Real dashboard without auth - for testing */}
+        <Route
+          path="/dashboard-no-auth"
+          element={
+            <LotsProvider>
+              <PermitsProvider>
+                <TooltipProvider>
+                  <Dashboard />
+                </TooltipProvider>
+              </PermitsProvider>
+            </LotsProvider>
+          }
+        />
 
         {/* All other routes wrapped in auth */}
         <Route
