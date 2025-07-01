@@ -17,6 +17,7 @@ import UserManagement from "./pages/UserManagement";
 import LotManagement from "./pages/LotManagement";
 import Scanner from "./pages/Scanner";
 import Emergency from "./pages/Emergency";
+import TestDashboard from "./pages/TestDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
