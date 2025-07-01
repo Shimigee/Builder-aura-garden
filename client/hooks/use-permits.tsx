@@ -51,6 +51,8 @@ const demoPermits: Permit[] = [
       year: 2021,
       color: "Blue",
       licensePlate: "XYZ-5678",
+      imageUrl:
+        "https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?w=400&h=300&fit=crop&auto=format",
     },
   },
   {
