@@ -11,6 +11,7 @@ import { User } from "@shared/api";
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, fullName: string) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
 }
