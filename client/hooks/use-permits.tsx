@@ -30,6 +30,8 @@ const demoPermits: Permit[] = [
       year: 2022,
       color: "Silver",
       licensePlate: "ABC-1234",
+      imageUrl:
+        "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400&h=300&fit=crop&auto=format",
     },
   },
   {
