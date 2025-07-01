@@ -4,7 +4,7 @@ import { AuthGuard } from "@/components/AuthGuard";
 import { LotDialog } from "@/components/LotDialog";
 import { PermitDialog } from "@/components/PermitDialog";
 import { useAuth } from "@/hooks/use-auth";
-import { useLots } from "@/hooks/use-lots-supabase";
+import { useLots } from "@/hooks/use-lots";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

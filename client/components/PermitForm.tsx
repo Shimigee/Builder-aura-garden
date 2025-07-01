@@ -28,7 +28,7 @@ import {
   OccupantStatus,
 } from "@shared/api";
 import { useAuth } from "@/hooks/use-auth";
-import { useLots } from "@/hooks/use-lots-supabase";
+import { useLots } from "@/hooks/use-lots";
 import {
   Save,
   Car,

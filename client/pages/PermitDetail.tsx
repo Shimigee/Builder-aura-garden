@@ -4,7 +4,7 @@ import { AuthGuard } from "@/components/AuthGuard";
 import { PermitDialog } from "@/components/PermitDialog";
 import { QRCodeGenerator } from "@/components/QRCodeGenerator";
 import { useAuth } from "@/hooks/use-auth";
-import { useLots } from "@/hooks/use-lots-supabase";
+import { useLots } from "@/hooks/use-lots";
 import { usePermits } from "@/hooks/use-permits-supabase";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
