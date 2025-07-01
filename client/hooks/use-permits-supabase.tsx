@@ -110,6 +110,7 @@ export function PermitsProvider({ children }: { children: ReactNode }) {
       }
 
       console.log("📝 Permit data being inserted:", permitData);
+      console.log("📝 User creating permit:", user.id, user.email);
 
       // Insert permit with proper date handling
       const { data: permitResult, error: permitError } = await supabase
