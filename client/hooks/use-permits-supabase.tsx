@@ -109,7 +109,9 @@ export function PermitsProvider({ children }: { children: ReactNode }) {
         throw new Error("User not authenticated");
       }
 
-      // Insert permit
+      console.log("📝 Permit data being inserted:", permitData);
+
+      // Insert permit with proper date handling
       const { data: permitResult, error: permitError } = await supabase
         .from("permits")
         .insert({
@@ -118,12 +120,17 @@ export function PermitsProvider({ children }: { children: ReactNode }) {
           holder_name: permitData.holderName,
           unit_number: permitData.unitNumber,
           permit_type: permitData.permitType,
-          occupant_status: permitData.occupantStatus,
+          occupant_status: permitData.occupantStatus || "leaseholder",
           parking_spot_number: permitData.parkingSpotNumber,
           is_active: permitData.isActive,
-          issue_date: permitData.issueDate,
-          expiration_date: permitData.expirationDate,
-          notes: permitData.notes,
+          issue_date:
+            permitData.issueDate || new Date().toISOString().split("T")[0], // Default to today
+          expiration_date:
+            permitData.expirationDate ||
+            new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+              .toISOString()
+              .split("T")[0], // Default to 1 year from now
+          notes: permitData.notes || "",
           created_by: user.id,
         })
         .select()
