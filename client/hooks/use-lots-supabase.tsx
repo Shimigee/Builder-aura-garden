@@ -61,6 +61,8 @@ export function LotsProvider({ children }: { children: ReactNode }) {
 
   const addLot = async (lotData: Omit<Lot, "id">) => {
     try {
+      console.log("🏢 Adding lot:", lotData);
+
       const { data, error } = await supabase
         .from("lots")
         .insert({
@@ -72,11 +74,15 @@ export function LotsProvider({ children }: { children: ReactNode }) {
         .select()
         .single();
 
+      console.log("🏢 Insert response:", { data, error });
+
       if (error) {
+        console.error("❌ Database error:", error.message, error.code, error);
         throw new Error(error.message);
       }
 
       if (data) {
+        console.log("✅ Lot added successfully:", data);
         const newLot: Lot = {
           id: data.id,
           name: data.name,
@@ -87,7 +93,7 @@ export function LotsProvider({ children }: { children: ReactNode }) {
         setLots((prev) => [...prev, newLot]);
       }
     } catch (error) {
-      console.error("Error adding lot:", error);
+      console.error("💥 Error adding lot:", error);
       throw error;
     }
   };
