@@ -110,6 +110,7 @@ export function PermitForm({
       : {
           permitNumber: generatePermitNumber(),
           lotId: preselectedLotId || "",
+          issueDate: new Date().toISOString().split("T")[0], // Today
           expirationDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
             .toISOString()
             .split("T")[0], // 1 year from now
