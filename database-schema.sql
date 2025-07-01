@@ -81,7 +81,7 @@ CREATE POLICY "Users can view lots they have access to" ON public.lots
     EXISTS (
       SELECT 1 FROM public.users
       WHERE id = auth.uid()
-      AND (role = 'admin' OR lots.id::text = ANY(assigned_lots))
+      AND (role = 'admin' OR lots.id = ANY(assigned_lots))
     )
   );
 
