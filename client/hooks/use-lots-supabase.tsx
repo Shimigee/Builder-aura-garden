@@ -32,13 +32,17 @@ export function LotsProvider({ children }: { children: ReactNode }) {
   const fetchLots = async () => {
     try {
       setIsLoading(true);
+      console.log("🏢 Fetching lots from database...");
+
       const { data, error } = await supabase
         .from("lots")
         .select("*")
         .order("name");
 
+      console.log("🏢 Fetch lots response:", { data, error });
+
       if (error) {
-        console.error("Error fetching lots:", error);
+        console.error("❌ Error fetching lots:", error.message, error);
         return;
       }
 
