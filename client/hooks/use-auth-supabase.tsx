@@ -54,6 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUserProfile = async (userId: string) => {
     try {
+      console.log("Fetching user profile for:", userId);
+
       const { data, error } = await supabase
         .from("users")
         .select("*")
@@ -62,10 +64,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (error) {
         console.error("Error fetching user profile:", error.message, error);
+
+        // If user doesn't exist, create a default profile
+        if (error.code === "PGRST116") {
+          console.log("User profile doesn't exist, creating default...");
+          await createDefaultUserProfile(userId);
+          return;
+        }
         return;
       }
 
       if (data) {
+        console.log("User profile loaded:", data);
         setUser({
           id: data.id,
           email: data.email,
@@ -78,6 +88,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
+    }
+  };
+
+  const createDefaultUserProfile = async (userId: string) => {
+    try {
+      // Get user email from auth
+      const { data: authUser } = await supabase.auth.getUser();
+
+      if (!authUser.user?.email) {
+        console.error("No email found for user");
+        return;
+      }
+
+      const defaultProfile = {
+        id: userId,
+        email: authUser.user.email,
+        name: authUser.user.email.split("@")[0], // Use email prefix as name
+        role: "viewer", // Default role
+        assigned_lots: ["lot-1"], // Default to first lot
+      };
+
+      const { data, error } = await supabase
+        .from("users")
+        .insert(defaultProfile)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Error creating user profile:", error.message, error);
+        return;
+      }
+
+      if (data) {
+        console.log("Default user profile created:", data);
+        setUser({
+          id: data.id,
+          email: data.email,
+          name: data.name,
+          role: data.role,
+          assignedLots: data.assigned_lots || [],
+          createdAt: data.created_at,
+          updatedAt: data.updated_at,
+        });
+      }
+    } catch (error) {
+      console.error("Error creating default user profile:", error);
     }
   };
 
