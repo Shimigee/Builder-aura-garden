@@ -205,8 +205,14 @@ export function LoginForm() {
                     variant="secondary"
                     className="w-full"
                     onClick={() => {
+                      console.log("Skip auth clicked");
                       // Force skip authentication for testing
-                      window.location.href = "/dashboard";
+                      try {
+                        window.location.replace("/dashboard");
+                      } catch (e) {
+                        console.error("Navigation failed:", e);
+                        window.location.href = "/dashboard";
+                      }
                     }}
                   >
                     Skip Auth (Testing Only)
