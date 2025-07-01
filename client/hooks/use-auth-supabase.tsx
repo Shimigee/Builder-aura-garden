@@ -139,6 +139,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (email: string, password: string) => {
+    console.log("Login attempt for:", email);
     setIsLoading(true);
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -146,14 +147,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password,
       });
 
+      console.log("Login response:", { data, error });
+
       if (error) {
+        console.error("Login error:", error.message);
         throw new Error(error.message);
       }
 
       if (data.user) {
+        console.log("Login successful, fetching profile...");
         await fetchUserProfile(data.user.id);
       }
     } catch (error) {
+      console.error("Login catch block:", error);
       throw error;
     } finally {
       setIsLoading(false);
